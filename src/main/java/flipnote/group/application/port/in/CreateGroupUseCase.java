@@ -4,5 +4,5 @@ import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.application.port.in.result.CreateGroupResult;
 
 public interface CreateGroupUseCase {
-	CreateGroupResult create(CreateGroupCommand cmd, Long userId);
+	CreateGroupResult create(CreateGroupCommand cmd);
 }

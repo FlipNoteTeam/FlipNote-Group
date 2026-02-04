@@ -22,12 +22,11 @@ public class CreateGroupService implements CreateGroupUseCase {
 	/**
 	 * 그룹 생성
 	 * @param cmd
-	 * @param userId
 	 * @return
 	 */
 	@Override
 	@Transactional
-	public CreateGroupResult create(CreateGroupCommand cmd, Long userId) {
+	public CreateGroupResult create(CreateGroupCommand cmd) {
 
 		//도메인 생성 및 검증
 		var domainGroup = Group.create(cmd);
@@ -36,7 +35,7 @@ public class CreateGroupService implements CreateGroupUseCase {
 		Long groupId = groupRepository.saveNewGroup(GroupMapper.createNewEntity(domainGroup));
 
 		//그룹 멤버 저장
-		groupMemberRepository.saveOwner(groupId, userId);
+		groupMemberRepository.saveOwner(groupId, cmd.userId());
 		
 		return new CreateGroupResult(groupId);
 	}

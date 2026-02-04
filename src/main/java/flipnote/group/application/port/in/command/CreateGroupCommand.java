@@ -5,6 +5,7 @@ import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
 public record CreateGroupCommand(
+	Long userId,
 	String name,
 	Category category,
 	String description,
