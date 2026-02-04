@@ -66,4 +66,30 @@ public class GroupEntity extends BaseEntity {
 		this.imageRefId = imageRefId;
 		this.memberCount = memberCount;
 	}
+
+	/**
+	 * 업데이트
+	 * @param name
+	 * @param category
+	 * @param description
+	 * @param joinPolicy
+	 * @param visibility
+	 * @param maxMember
+	 * @param imageRefId
+	 * @param memberCount
+	 */
+	public void change(
+		String name, Category category, String description,
+		JoinPolicy joinPolicy, Visibility visibility,
+		Integer maxMember, Long imageRefId, Integer memberCount
+	) {
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.joinPolicy = joinPolicy;
+		this.visibility = visibility;
+		this.maxMember = maxMember;
+		this.imageRefId = imageRefId;
+		this.memberCount = memberCount;
+	}
 }

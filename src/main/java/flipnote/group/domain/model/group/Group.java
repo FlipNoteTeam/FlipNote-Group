@@ -1,5 +1,7 @@
 package flipnote.group.domain.model.group;
 
+import java.time.LocalDateTime;
+
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Group {
 
@@ -23,6 +24,9 @@ public class Group {
 	private int maxMember;
 	private Long imageRefId;
 	private int memberCount;
+
+	private LocalDateTime createdAt;
+	private LocalDateTime modifiedAt;
 
 	/**
 	 * 신규로 그룹 생성
@@ -59,7 +63,7 @@ public class Group {
 	 * @param memberCount
 	 * @return
 	 */
-	public static Group getGroup(
+	public static Group restore(
 		Long id,
 		String name,
 		Category category,
@@ -68,7 +72,9 @@ public class Group {
 		Visibility visibility,
 		int maxMember,
 		Long imageRefId,
-		int memberCount
+		int memberCount,
+		LocalDateTime createdAt,
+		LocalDateTime modifiedAt
 	) {
 		Group g = new Group();
 		g.id = id;
@@ -80,6 +86,8 @@ public class Group {
 		g.maxMember = maxMember;
 		g.imageRefId = imageRefId;
 		g.memberCount = memberCount;
+		g.createdAt = createdAt;
+		g.modifiedAt = modifiedAt;
 		return g;
 	}
 

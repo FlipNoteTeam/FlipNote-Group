@@ -74,6 +74,9 @@ public class GroupController {
 		);
 
 		var result = changeGroupUseCase.change(cmd);
+
+		ChangeGroupResponseDto res = ChangeGroupResponseDto.from(result);
+		return ResponseEntity.ok(res);
 	}
 
 }
