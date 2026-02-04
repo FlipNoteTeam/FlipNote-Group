@@ -24,7 +24,7 @@ public class GroupMapper {
 			.joinPolicy(domain.getJoinPolicy())
 			.visibility(domain.getVisibility())
 			.maxMember(domain.getMaxMember())
-			.imageUrl(domain.getImageUrl())
+			.imageRefId(domain.getImageRefId())
 			.memberCount(domain.getMemberCount())
 			.build();
 	}

@@ -15,5 +15,5 @@ public record CreateGroupRequestDto(
 	@NotNull JoinPolicy joinPolicy,
 	@NotNull Visibility visibility,
 	@NotNull @Min(1) @Max(100) Integer maxMember,
-	String imageUrl
+	Long imageRefId
 ) {}

@@ -21,7 +21,7 @@ public class Group {
 	private Visibility visibility;
 
 	private int maxMember;
-	private String imageUrl;
+	private Long imageRefId;
 	private int memberCount;
 
 	/**
@@ -39,7 +39,7 @@ public class Group {
 		group.joinPolicy = cmd.joinPolicy();
 		group.visibility = cmd.visibility();
 		group.maxMember = cmd.maxMember();
-		group.imageUrl = cmd.imageUrl();
+		group.imageRefId = cmd.imageRefId();
 
 		group.memberCount = 1;
 
@@ -55,7 +55,7 @@ public class Group {
 	 * @param joinPolicy
 	 * @param visibility
 	 * @param maxMember
-	 * @param imageUrl
+	 * @param imageRefId
 	 * @param memberCount
 	 * @return
 	 */
@@ -67,7 +67,7 @@ public class Group {
 		JoinPolicy joinPolicy,
 		Visibility visibility,
 		int maxMember,
-		String imageUrl,
+		Long imageRefId,
 		int memberCount
 	) {
 		Group g = new Group();
@@ -78,7 +78,7 @@ public class Group {
 		g.joinPolicy = joinPolicy;
 		g.visibility = visibility;
 		g.maxMember = maxMember;
-		g.imageUrl = imageUrl;
+		g.imageRefId = imageRefId;
 		g.memberCount = memberCount;
 		return g;
 	}

@@ -11,6 +11,6 @@ public record CreateGroupCommand(
 	JoinPolicy joinPolicy,
 	Visibility visibility,
 	int maxMember,
-	String imageUrl
+	Long imageRefId
 ) {
 }

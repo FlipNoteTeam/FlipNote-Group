@@ -49,21 +49,21 @@ public class GroupEntity extends BaseEntity {
 	@Column(nullable = false)
 	private Integer maxMember;
 
-	private String imageUrl;
+	private Long imageRefId;
 
 	@Column(nullable = false)
 	private Integer memberCount;
 
 	@Builder
 	private GroupEntity(String name, Category category, String description, JoinPolicy joinPolicy, Visibility visibility,
-		Integer maxMember, String imageUrl, Integer memberCount) {
+		Integer maxMember, Long imageRefId, Integer memberCount) {
 		this.name = name;
 		this.category = category;
 		this.description = description;
 		this.joinPolicy = joinPolicy;
 		this.visibility = visibility;
 		this.maxMember = maxMember;
-		this.imageUrl = imageUrl;
+		this.imageRefId = imageRefId;
 		this.memberCount = memberCount;
 	}
 }

@@ -39,7 +39,7 @@ public class GroupController {
 			req.joinPolicy(),
 			req.visibility(),
 			req.maxMember(),
-			req.imageUrl()
+			req.imageRefId()
 		);
 
 		var result = createGroupUseCase.create(cmd, userId);
