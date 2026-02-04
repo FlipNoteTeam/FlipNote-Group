@@ -14,7 +14,7 @@ public class GroupMember {
 	private Long id;
 	private GroupId groupId;
 	private UserId userId;
-	private GroupRole role;
+	private GroupMemberRole role;
 
 	/**
 	 * 유저가 오너일 경우
@@ -26,7 +26,7 @@ public class GroupMember {
 		GroupMember gm = new GroupMember();
 		gm.groupId = groupId;
 		gm.userId = ownerUserId;
-		gm.role = GroupRole.OWNER;
+		gm.role = GroupMemberRole.OWNER;
 		return gm;
 	}
 
@@ -40,7 +40,7 @@ public class GroupMember {
 		GroupMember gm = new GroupMember();
 		gm.groupId = groupId;
 		gm.userId = userId;
-		gm.role = GroupRole.MEMBER;
+		gm.role = GroupMemberRole.MEMBER;
 		return gm;
 	}
 

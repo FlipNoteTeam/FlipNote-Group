@@ -1,8 +1,7 @@
 package flipnote.group.adapter.out.entity;
 
-import flipnote.group.domain.model.group.GroupId;
-import flipnote.group.domain.model.member.GroupRole;
-import flipnote.group.domain.model.user.UserId;
+import flipnote.group.domain.model.BaseEntity;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +28,7 @@ import lombok.NoArgsConstructor;
 	}
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupMemberEntity {
+public class GroupMemberEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,13 +42,13 @@ public class GroupMemberEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private GroupRole role;
+	private GroupMemberRole role;
 
 	@Builder
-	private GroupMemberEntity(Long groupId, Long userId, GroupRole role) {
+	private GroupMemberEntity(Long groupId, Long userId, GroupMemberRole role) {
 		this.groupId = groupId;
 		this.userId = userId;
-		this.role = (role != null) ? role : GroupRole.MEMBER;
+		this.role = (role != null) ? role : GroupMemberRole.MEMBER;
 	}
 
 	/**
@@ -62,7 +61,7 @@ public class GroupMemberEntity {
 		return GroupMemberEntity.builder()
 			.groupId(groupId)
 			.userId(userId)
-			.role(GroupRole.OWNER)
+			.role(GroupMemberRole.OWNER)
 			.build();
 	}
 
@@ -76,7 +75,7 @@ public class GroupMemberEntity {
 		return GroupMemberEntity.builder()
 			.groupId(groupId)
 			.userId(userId)
-			.role(GroupRole.MEMBER)
+			.role(GroupMemberRole.MEMBER)
 			.build();
 	}
 }

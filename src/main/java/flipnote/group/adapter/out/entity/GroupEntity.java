@@ -4,6 +4,7 @@ import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.domain.model.BaseEntity;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.JoinPolicy;
+import flipnote.group.domain.model.group.Visibility;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "groups")
+@Table(name = "app_groups")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupEntity extends BaseEntity {
 
@@ -37,11 +38,13 @@ public class GroupEntity extends BaseEntity {
 	@Column(nullable = false)
 	private String description;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private JoinPolicy joinPolicy;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private Boolean visibility;
+	private Visibility visibility;
 
 	@Column(nullable = false)
 	private Integer maxMember;
@@ -51,7 +54,8 @@ public class GroupEntity extends BaseEntity {
 	@Column(nullable = false)
 	private Integer memberCount;
 
-	private void init(String name, Category category, String description, JoinPolicy joinPolicy, Boolean visibility,
+	@Builder
+	private GroupEntity(String name, Category category, String description, JoinPolicy joinPolicy, Visibility visibility,
 		Integer maxMember, String imageUrl, Integer memberCount) {
 		this.name = name;
 		this.category = category;
@@ -61,9 +65,5 @@ public class GroupEntity extends BaseEntity {
 		this.maxMember = maxMember;
 		this.imageUrl = imageUrl;
 		this.memberCount = memberCount;
-	}
-
-	public void increaseMemberCount() {
-		this.memberCount++;
 	}
 }

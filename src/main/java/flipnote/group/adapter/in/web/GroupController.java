@@ -32,9 +32,19 @@ public class GroupController {
 		@RequestHeader("X-USER-ID") Long userId,
 	    @RequestBody @Valid CreateGroupRequestDto req) {
 
-		CreateGroupCommand cmd = new CreateGroupCommand();
+		CreateGroupCommand cmd = new CreateGroupCommand(
+			req.name(),
+			req.category(),
+			req.description(),
+			req.joinPolicy(),
+			req.visibility(),
+			req.maxMember(),
+			req.imageUrl()
+		);
 
-		return null;
+		var result = createGroupUseCase.create(cmd, userId);
+		CreateGroupResponseDto res = CreateGroupResponseDto.from(result.groupId());
+		return ResponseEntity.ok(res);
 	}
 
 }
