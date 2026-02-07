@@ -55,6 +55,13 @@ public class GroupController {
 		return ResponseEntity.ok(res);
 	}
 
+	/**
+	 * 그룹 수정 API
+	 * @param userId
+	 * @param groupId
+	 * @param req
+	 * @return
+	 */
 	@PutMapping("/{groupId}")
 	public ResponseEntity<ChangeGroupResponseDto> changeGroup(
 		@RequestHeader("X-USER-ID") Long userId,
