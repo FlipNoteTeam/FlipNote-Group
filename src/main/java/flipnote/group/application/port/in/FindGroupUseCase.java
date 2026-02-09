@@ -1,8 +1,8 @@
 package flipnote.group.application.port.in;
 
 import flipnote.group.application.port.in.command.FindGroupCommand;
-import flipnote.group.application.port.in.result.FIndGroupResult;
+import flipnote.group.application.port.in.result.FindGroupResult;
 
 public interface FindGroupUseCase {
-	FIndGroupResult findGroup(FindGroupCommand cmd);
+	FindGroupResult findGroup(FindGroupCommand cmd);
 }

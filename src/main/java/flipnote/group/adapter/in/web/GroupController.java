@@ -91,6 +91,12 @@ public class GroupController {
 		return ResponseEntity.ok(res);
 	}
 
+	/**
+	 * 그룹 상세 조회 API
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 */
 	@GetMapping("/{groupId}")
 	public ResponseEntity<FindGroupResponseDto> findGroup(
 		@RequestHeader("X-USER-ID") Long userId,
@@ -99,6 +105,10 @@ public class GroupController {
 		FindGroupCommand cmd = new FindGroupCommand(userId, groupId);
 
 		var result = findGroupUseCase.findGroup(cmd);
+
+		FindGroupResponseDto res = FindGroupResponseDto.from(result);
+
+		return ResponseEntity.ok(res);
 	}
 
 }
