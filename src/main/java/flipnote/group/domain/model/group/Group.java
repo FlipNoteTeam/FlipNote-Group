@@ -106,5 +106,8 @@ public class Group {
 		if (cmd.description() == null || cmd.description().isBlank()) {
 			throw new IllegalArgumentException("description required");
 		}
+		if (cmd.name().length() > 50) {
+			throw new IllegalArgumentException("name too long");
+		}
 	}
 }
