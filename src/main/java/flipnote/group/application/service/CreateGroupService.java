@@ -33,7 +33,7 @@ public class CreateGroupService implements CreateGroupUseCase {
 		var domainGroup = Group.create(cmd);
 		
 		//그룹 도메인 -> 엔티티 변환 후 저장
-		Long groupId = groupRepository.saveNewGroup(GroupMapper.createNewEntity(domainGroup));
+		Long groupId = groupRepository.saveNewGroup(domainGroup);
 
 		//그룹 멤버 저장
 		groupMemberRepository.saveOwner(groupId, userId);
