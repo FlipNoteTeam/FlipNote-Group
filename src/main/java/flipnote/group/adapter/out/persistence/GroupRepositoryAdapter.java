@@ -35,29 +35,4 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 		);
 		return GroupMapper.toDomain(groupEntity);
 	}
-
-	/**
-	 * 그룹 수정
-	 * @param group
-	 */
-	@Override
-	public Group update(Group group) {
-
-		GroupEntity groupEntity = groupRepository.findById(group.getId()).orElseThrow(
-			() -> new IllegalArgumentException("group not Exist")
-		);
-
-		groupEntity.change(
-			group.getName(),
-			group.getCategory(),
-			group.getDescription(),
-			group.getJoinPolicy(),
-			group.getVisibility(),
-			group.getMaxMember(),
-			group.getImageRefId()
-		);
-
-		return GroupMapper.toDomain(groupEntity);
-	}
-
 }

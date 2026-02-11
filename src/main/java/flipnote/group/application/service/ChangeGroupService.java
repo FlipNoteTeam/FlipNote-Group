@@ -10,8 +10,6 @@ import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
-import flipnote.group.application.port.out.GroupRepositoryPort;
-import flipnote.group.domain.model.group.Group;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 

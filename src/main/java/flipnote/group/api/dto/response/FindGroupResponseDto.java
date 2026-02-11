@@ -2,13 +2,13 @@ package flipnote.group.api.dto.response;
 
 import java.time.LocalDateTime;
 
-import flipnote.group.application.port.in.result.ChangeGroupResult;
+import flipnote.group.application.port.in.result.FindGroupResult;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.Group;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
-public record ChangeGroupResponseDto(
+public record FindGroupResponseDto(
 	Long groupId,
 
 	String name,
@@ -29,11 +29,11 @@ public record ChangeGroupResponseDto(
 
 	LocalDateTime modifiedAt
 ) {
-	public static ChangeGroupResponseDto from(ChangeGroupResult result) {
+	public static FindGroupResponseDto from(FindGroupResult result) {
 
 		Group group = result.group();
 
-		return new ChangeGroupResponseDto(
+		return new FindGroupResponseDto(
 			group.getId(),
 			group.getName(),
 			group.getCategory(),
