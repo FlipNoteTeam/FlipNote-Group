@@ -40,42 +40,27 @@ public class GroupMemberEntity extends BaseEntity {
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private GroupMemberRole role;
+	@Column(name = "group_role_id", nullable = false)
+	private Long groupRoleId;
 
 	@Builder
-	private GroupMemberEntity(Long groupId, Long userId, GroupMemberRole role) {
+	private GroupMemberEntity(Long groupId, Long userId, Long groupRoleId) {
 		this.groupId = groupId;
 		this.userId = userId;
-		this.role = (role != null) ? role : GroupMemberRole.MEMBER;
+		this.groupRoleId = groupRoleId;
 	}
 
 	/**
-	 * 오너인 경우
+	 * 멤버 생성
 	 * @param groupId
 	 * @param userId
 	 * @return
 	 */
-	public static GroupMemberEntity createOwner(Long groupId, Long userId) {
+	public static GroupMemberEntity create(Long groupId, Long userId, Long groupRoleId) {
 		return GroupMemberEntity.builder()
 			.groupId(groupId)
 			.userId(userId)
-			.role(GroupMemberRole.OWNER)
-			.build();
-	}
-
-	/**
-	 * 오너가 아닌 경우
-	 * @param groupId
-	 * @param userId
-	 * @return
-	 */
-	public static GroupMemberEntity join(Long groupId, Long userId) {
-		return GroupMemberEntity.builder()
-			.groupId(groupId)
-			.userId(userId)
-			.role(GroupMemberRole.MEMBER)
+			.groupRoleId(groupRoleId)
 			.build();
 	}
 }
