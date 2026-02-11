@@ -19,15 +19,13 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	/**
 	 * 그룹 저장
-	 * @param groupEntity
+	 * @param group
 	 * @return
 	 */
 	@Override
-	public Long saveNewGroup(GroupEntity groupEntity) {
-
-		GroupEntity group = groupRepository.save(groupEntity);
-
-		return group.getId();
+	public Long saveNewGroup(Group group) {
+		GroupEntity entity = GroupMapper.createNewEntity(group);
+		return groupRepository.save(entity).getId();
 	}
 
 	@Override

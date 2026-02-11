@@ -6,7 +6,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.domain.model.group.Group;
 
 public interface GroupRepositoryPort {
-    Long saveNewGroup(GroupEntity groupEntity);
+    Long saveNewGroup(Group group);
 
     Optional<GroupEntity> findById(Long id);
 
