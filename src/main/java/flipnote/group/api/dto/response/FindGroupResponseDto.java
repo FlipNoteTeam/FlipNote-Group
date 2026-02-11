@@ -9,6 +9,8 @@ import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
 public record FindGroupResponseDto(
+	Long groupId,
+
 	String name,
 
 	Category category,
@@ -32,6 +34,7 @@ public record FindGroupResponseDto(
 		Group group = result.group();
 
 		return new FindGroupResponseDto(
+			group.getId(),
 			group.getName(),
 			group.getCategory(),
 			group.getDescription(),
