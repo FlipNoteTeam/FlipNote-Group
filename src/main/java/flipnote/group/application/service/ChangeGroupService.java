@@ -29,13 +29,11 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	@Transactional
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
-		GroupEntity groupEntity = groupRepository.findById(cmd.groupId()).orElseThrow(
-			() -> new IllegalArgumentException("group not exists")
-		);
+		Group findGroup = groupRepository.findById(cmd.groupId());
 
-		Group domainGroup = GroupMapper.toDomain(groupEntity);
+		findGroup.change(cmd);
 
-		Group group = groupRepository.update(domainGroup, groupEntity);
+		Group group = groupRepository.update(findGroup);
 
 		return new ChangeGroupResult(group);
 	}

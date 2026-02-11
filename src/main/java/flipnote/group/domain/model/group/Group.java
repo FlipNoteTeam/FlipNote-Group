@@ -2,6 +2,7 @@ package flipnote.group.domain.model.group;
 
 import java.time.LocalDateTime;
 
+import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -117,5 +118,16 @@ public class Group {
 		if (cmd.name().length() > 50) {
 			throw new IllegalArgumentException("name too long");
 		}
+	}
+
+	public void change(ChangeGroupCommand cmd) {
+		// 권한 검증 등 비즈니스 로직 추가 가능
+		this.name = cmd.name();
+		this.category = cmd.category();
+		this.description = cmd.description();
+		this.joinPolicy = cmd.joinPolicy();
+		this.visibility = cmd.visibility();
+		this.maxMember = cmd.maxMember();
+		this.imageRefId = cmd.imageRefId();
 	}
 }

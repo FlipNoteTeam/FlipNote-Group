@@ -29,8 +29,11 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	}
 
 	@Override
-	public Optional<GroupEntity> findById(Long id) {
-		return groupRepository.findById(id);
+	public Group findById(Long id) {
+		GroupEntity groupEntity = groupRepository.findById(id).orElseThrow(
+			() -> new IllegalArgumentException("Group not Exist")
+		);
+		return GroupMapper.toDomain(groupEntity);
 	}
 
 	/**
@@ -38,7 +41,12 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	 * @param group
 	 */
 	@Override
-	public Group update(Group group, GroupEntity groupEntity) {
+	public Group update(Group group) {
+
+		GroupEntity groupEntity = groupRepository.findById(group.getId()).orElseThrow(
+			() -> new IllegalArgumentException("group not Exist")
+		);
+
 		groupEntity.change(
 			group.getName(),
 			group.getCategory(),
