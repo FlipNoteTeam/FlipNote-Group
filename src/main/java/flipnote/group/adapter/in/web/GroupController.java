@@ -18,6 +18,7 @@ import flipnote.group.api.dto.response.CreateGroupResponseDto;
 import flipnote.group.api.dto.response.FindGroupResponseDto;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.CreateGroupUseCase;
+import flipnote.group.application.port.in.DeleteGroupUseCase;
 import flipnote.group.application.port.in.FindGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
@@ -34,6 +35,7 @@ public class GroupController {
 	private final CreateGroupUseCase createGroupUseCase;
 	private final ChangeGroupUseCase changeGroupUseCase;
 	private final FindGroupUseCase findGroupUseCase;
+	private final DeleteGroupUseCase deleteGroupUseCase;
 
 	/**
 	 * 그룹 생성 API
@@ -113,6 +115,13 @@ public class GroupController {
 		return ResponseEntity.ok(res);
 	}
 
+	/**
+	 * 그룹 삭제
+	 * todo 추후 권환 체크 후 권환 확인 후 삭제
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 */
 	@DeleteMapping("/{groupId}")
 	public ResponseEntity<Void> deleteGroup(
 		@RequestHeader("X-USER-ID") Long userId,
@@ -121,7 +130,7 @@ public class GroupController {
 
 		DeleteGroupCommand cmd = new DeleteGroupCommand(userId, groupId);
 
-		d
+		deleteGroupUseCase.deleteGroup(cmd);
 
 		return ResponseEntity.noContent().build();
 	}
