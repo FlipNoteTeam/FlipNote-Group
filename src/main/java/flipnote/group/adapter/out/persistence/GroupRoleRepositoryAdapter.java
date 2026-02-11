@@ -11,6 +11,7 @@ import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRolePermissionRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 
 	private final GroupRoleRepository groupRoleRepository;
 	private final GroupRolePermissionRepository groupRolePermissionRepository;
+	private final GroupMemberRepository groupMemberRepository;
 
 	private static final Map<GroupMemberRole, List<GroupPermission>> DEFAULT_PERMS_BY_ROLE =
 		Map.of(
@@ -78,5 +80,20 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 
 		// 그룹 생성자에게 OWNER roleId 리턴 (바깥에서 group_members 생성할 때 사용)
 		return roleIdByRole.get(GroupMemberRole.OWNER);
+	}
+
+	/**
+	 * 해당 유저가 그룹 내에 역할인지 확인
+	 * 오너 여부에서 사용
+	 * @param userId
+	 * @param groupId
+	 * @param groupMemberRole
+	 * @return
+	 */
+	@Override
+	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole);
+
+		return groupMemberRepository.existsByUserIdAndGroupRoleId(userId, roleEntity.getId());
 	}
 }
