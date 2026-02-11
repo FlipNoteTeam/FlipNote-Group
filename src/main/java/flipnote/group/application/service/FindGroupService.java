@@ -27,11 +27,7 @@ public class FindGroupService implements FindGroupUseCase {
 	@Override
 	public FindGroupResult findGroup(FindGroupCommand cmd) {
 
-		GroupEntity groupEntity = groupRepository.findById(cmd.groupId()).orElseThrow(
-			() -> new IllegalArgumentException("Group not Exists")
-		);
-
-		Group group = GroupMapper.toDomain(groupEntity);
+		Group group = groupRepository.findById(cmd.groupId());
 
 		return new FindGroupResult(group);
 	}
