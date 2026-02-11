@@ -10,11 +10,7 @@ import lombok.NoArgsConstructor;
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GroupMemberMapper {
-	public static GroupMemberEntity createOwner(Long groupId, Long userId) {
-		return GroupMemberEntity.builder()
-			.groupId(groupId)
-			.userId(userId)
-			.role(GroupMemberRole.OWNER)
-			.build();
+	public static GroupMemberEntity create(Long groupId, Long userId, Long roleId) {
+		return GroupMemberEntity.create(groupId, userId, roleId);
 	}
 }

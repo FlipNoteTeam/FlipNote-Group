@@ -15,12 +15,12 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	private final GroupMemberRepository groupMemberRepository;
 
 	/**
-	 * 오너일 경우
+	 *
 	 * @param groupId
 	 * @param userId
 	 */
 	@Override
-	public void saveOwner(Long groupId, Long userId) {
-		groupMemberRepository.save(GroupMemberMapper.createOwner(groupId, userId));
+	public void save(Long groupId, Long userId, Long roleId) {
+		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, roleId));
 	}
 }

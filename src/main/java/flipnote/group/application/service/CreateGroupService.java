@@ -9,6 +9,7 @@ import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.application.port.in.result.CreateGroupResult;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
+import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.group.Group;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ public class CreateGroupService implements CreateGroupUseCase {
 
 	private final GroupRepositoryPort groupRepository;
 	private final GroupMemberRepositoryPort groupMemberRepository;
+	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	/**
 	 * 그룹 생성
@@ -33,9 +35,12 @@ public class CreateGroupService implements CreateGroupUseCase {
 		
 		//그룹 도메인 -> 엔티티 변환 후 저장
 		Long groupId = groupRepository.saveNewGroup(domainGroup);
+		
+		//그룹 역할 생성
+		Long roleId = groupRoleRepository.create(groupId);
 
-		//그룹 멤버 저장
-		groupMemberRepository.saveOwner(groupId, cmd.userId());
+		//생성자 오너 역할로 저장
+		groupMemberRepository.save(groupId, cmd.userId(), roleId);
 		
 		return new CreateGroupResult(groupId);
 	}

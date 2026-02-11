@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "group_roles",
 	uniqueConstraints = @UniqueConstraint(
 		name = "uk_group_roles_group_name",
-		columnNames = {"group_id", "name"}
+		columnNames = {"group_id", "role"}
 	)
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupRoleEntity {
+public class RoleEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,20 @@ public class GroupRoleEntity {
 	private Long groupId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 50)
-	private GroupMemberRole name;
+	@Column(nullable = false, length = 50, name = "group_role")
+	private GroupMemberRole role;
 
 	@Builder
-	private GroupRoleEntity(Long groupId, GroupMemberRole name) {
+	private RoleEntity(Long groupId, GroupMemberRole role) {
 		this.groupId = groupId;
-		this.name = name;
+		this.role = role;
+	}
+
+	public static RoleEntity create(Long groupId, GroupMemberRole groupMemberRole) {
+		return RoleEntity.builder()
+			.groupId(groupId)
+			.role(groupMemberRole)
+			.build();
 	}
 }
 

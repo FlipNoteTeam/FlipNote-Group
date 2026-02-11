@@ -1,6 +1,5 @@
 package flipnote.group.adapter.out.entity;
 
-import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +24,7 @@ import lombok.NoArgsConstructor;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupRolePermissionEntity {
+public class PermissionEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,8 +37,15 @@ public class GroupRolePermissionEntity {
 	private GroupPermission permission;
 
 	@Builder
-	private GroupRolePermissionEntity(Long groupRoleId, GroupPermission permission) {
+	private PermissionEntity(Long groupRoleId, GroupPermission permission) {
 		this.groupRoleId = groupRoleId;
 		this.permission = permission;
+	}
+
+	public static PermissionEntity create(Long groupRoleId, GroupPermission permission) {
+		return PermissionEntity.builder()
+			.groupRoleId(groupRoleId)
+			.permission(permission)
+			.build();
 	}
 }
