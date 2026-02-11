@@ -8,7 +8,7 @@ import flipnote.group.domain.model.group.Group;
 public interface GroupRepositoryPort {
     Long saveNewGroup(Group group);
 
-    Optional<GroupEntity> findById(Long id);
+    Optional<Group> findById(Long id);
 
-    Group update(Group group, GroupEntity groupEntity);
+    Group update(Group group);
 }
