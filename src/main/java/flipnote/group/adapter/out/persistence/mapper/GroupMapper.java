@@ -28,4 +28,25 @@ public class GroupMapper {
 			.memberCount(domain.getMemberCount())
 			.build();
 	}
+
+	/**
+	 * 엔티티 -> 도메인
+	 * @param e
+	 * @return
+	 */
+	public static Group toDomain(GroupEntity e) {
+		return Group.restore(
+			e.getId(),
+			e.getName(),
+			e.getCategory(),
+			e.getDescription(),
+			e.getJoinPolicy(),
+			e.getVisibility(),
+			e.getMaxMember(),
+			e.getImageRefId(),
+			e.getMemberCount(),
+			e.getCreatedAt(),
+			e.getModifiedAt()
+		);
+	}
 }

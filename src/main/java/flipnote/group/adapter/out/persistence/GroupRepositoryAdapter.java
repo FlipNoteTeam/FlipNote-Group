@@ -1,5 +1,7 @@
 package flipnote.group.adapter.out.persistence;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
@@ -15,9 +17,47 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	private final GroupRepository groupRepository;
 
+	/**
+	 * 그룹 저장
+	 * @param group
+	 * @return
+	 */
 	@Override
 	public Long saveNewGroup(Group group) {
 		GroupEntity entity = GroupMapper.createNewEntity(group);
 		return groupRepository.save(entity).getId();
 	}
+
+	@Override
+	public Group findById(Long id) {
+		GroupEntity groupEntity = groupRepository.findById(id).orElseThrow(
+			() -> new IllegalArgumentException("Group not Exist")
+		);
+		return GroupMapper.toDomain(groupEntity);
+	}
+
+	/**
+	 * 그룹 수정
+	 * @param group
+	 */
+	@Override
+	public Group update(Group group) {
+
+		GroupEntity groupEntity = groupRepository.findById(group.getId()).orElseThrow(
+			() -> new IllegalArgumentException("group not Exist")
+		);
+
+		groupEntity.change(
+			group.getName(),
+			group.getCategory(),
+			group.getDescription(),
+			group.getJoinPolicy(),
+			group.getVisibility(),
+			group.getMaxMember(),
+			group.getImageRefId()
+		);
+
+		return GroupMapper.toDomain(groupEntity);
+	}
+
 }

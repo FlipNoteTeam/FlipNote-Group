@@ -4,7 +4,8 @@ import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
-public record CreateGroupCommand(
+public record ChangeGroupCommand(
+	Long groupId,
 	Long userId,
 	String name,
 	Category category,
@@ -14,4 +15,5 @@ public record CreateGroupCommand(
 	int maxMember,
 	Long imageRefId
 ) {
+
 }
