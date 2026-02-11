@@ -1,6 +1,7 @@
 package flipnote.group.adapter.in.web;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import flipnote.group.application.port.in.CreateGroupUseCase;
 import flipnote.group.application.port.in.FindGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
+import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.in.command.FindGroupCommand;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -109,6 +111,19 @@ public class GroupController {
 		FindGroupResponseDto res = FindGroupResponseDto.from(result);
 
 		return ResponseEntity.ok(res);
+	}
+
+	@DeleteMapping("/{groupId}")
+	public ResponseEntity<Void> deleteGroup(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId
+	) {
+
+		DeleteGroupCommand cmd = new DeleteGroupCommand(userId, groupId);
+
+		d
+
+		return ResponseEntity.noContent().build();
 	}
 
 }

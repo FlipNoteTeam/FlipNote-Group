@@ -35,4 +35,9 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 		);
 		return GroupMapper.toDomain(groupEntity);
 	}
+
+	@Override
+	public void delete(Long groupId) {
+		groupRepository.deleteById(groupId);
+	}
 }
