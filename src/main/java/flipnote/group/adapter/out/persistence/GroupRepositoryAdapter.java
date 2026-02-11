@@ -48,8 +48,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 			group.getJoinPolicy(),
 			group.getVisibility(),
 			group.getMaxMember(),
-			group.getImageRefId(),
-			group.getMemberCount()
+			group.getImageRefId()
 		);
 
 		return GroupMapper.toDomain(groupEntity);

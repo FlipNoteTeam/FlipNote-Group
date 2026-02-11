@@ -76,12 +76,11 @@ public class GroupEntity extends BaseEntity {
 	 * @param visibility
 	 * @param maxMember
 	 * @param imageRefId
-	 * @param memberCount
 	 */
 	public void change(
 		String name, Category category, String description,
 		JoinPolicy joinPolicy, Visibility visibility,
-		Integer maxMember, Long imageRefId, Integer memberCount
+		Integer maxMember, Long imageRefId
 	) {
 		this.name = name;
 		this.category = category;
@@ -90,6 +89,5 @@ public class GroupEntity extends BaseEntity {
 		this.visibility = visibility;
 		this.maxMember = maxMember;
 		this.imageRefId = imageRefId;
-		this.memberCount = memberCount;
 	}
 }
