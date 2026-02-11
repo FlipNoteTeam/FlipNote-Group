@@ -2,6 +2,7 @@ package flipnote.group.domain.model.group;
 
 import java.time.LocalDateTime;
 
+import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -113,6 +114,9 @@ public class Group {
 		}
 		if (cmd.description() == null || cmd.description().isBlank()) {
 			throw new IllegalArgumentException("description required");
+		}
+		if (cmd.name().length() > 50) {
+			throw new IllegalArgumentException("name too long");
 		}
 	}
 }

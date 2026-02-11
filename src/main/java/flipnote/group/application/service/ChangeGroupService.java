@@ -12,13 +12,14 @@ import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.domain.model.group.Group;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ChangeGroupService implements ChangeGroupUseCase {
 
-	private final GroupRepositoryPort groupRepository;
+	private final GroupRepository jpaGroupRepository;
 
 	/**
 	 * 그룹 수정
@@ -29,14 +30,12 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	@Transactional
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
-		GroupEntity groupEntity = groupRepository.findById(cmd.groupId()).orElseThrow(
-			() -> new IllegalArgumentException("group not exists")
+		GroupEntity entity = jpaGroupRepository.findById(cmd.groupId()).orElseThrow(
+			() -> new IllegalArgumentException("group not Exists")
 		);
 
-		Group domainGroup = GroupMapper.toDomain(groupEntity);
+		entity.change(cmd);
 
-		Group group = groupRepository.update(domainGroup, groupEntity);
-
-		return new ChangeGroupResult(group);
+		return new ChangeGroupResult(GroupMapper.toDomain(entity));
 	}
 }

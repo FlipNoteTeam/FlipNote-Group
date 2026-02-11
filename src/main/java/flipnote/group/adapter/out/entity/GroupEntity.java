@@ -1,5 +1,6 @@
 package flipnote.group.adapter.out.entity;
 
+import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.domain.model.BaseEntity;
 import flipnote.group.domain.model.group.Category;
@@ -69,27 +70,17 @@ public class GroupEntity extends BaseEntity {
 
 	/**
 	 * 업데이트
-	 * @param name
-	 * @param category
-	 * @param description
-	 * @param joinPolicy
-	 * @param visibility
-	 * @param maxMember
-	 * @param imageRefId
-	 * @param memberCount
+	 * @param cmd
 	 */
 	public void change(
-		String name, Category category, String description,
-		JoinPolicy joinPolicy, Visibility visibility,
-		Integer maxMember, Long imageRefId, Integer memberCount
+		ChangeGroupCommand cmd
 	) {
-		this.name = name;
-		this.category = category;
-		this.description = description;
-		this.joinPolicy = joinPolicy;
-		this.visibility = visibility;
-		this.maxMember = maxMember;
-		this.imageRefId = imageRefId;
-		this.memberCount = memberCount;
+		this.name = cmd.name();
+		this.category = cmd.category();
+		this.description = cmd.description();
+		this.joinPolicy = cmd.joinPolicy();
+		this.visibility = cmd.visibility();
+		this.maxMember = cmd.maxMember();
+		this.imageRefId = cmd.imageRefId();
 	}
 }

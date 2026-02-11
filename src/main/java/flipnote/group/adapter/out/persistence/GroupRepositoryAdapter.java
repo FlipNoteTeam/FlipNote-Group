@@ -19,20 +19,21 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	/**
 	 * 그룹 저장
-	 * @param groupEntity
+	 * @param group
 	 * @return
 	 */
 	@Override
-	public Long saveNewGroup(GroupEntity groupEntity) {
-
-		GroupEntity group = groupRepository.save(groupEntity);
-
-		return group.getId();
+	public Long saveNewGroup(Group group) {
+		GroupEntity entity = GroupMapper.createNewEntity(group);
+		return groupRepository.save(entity).getId();
 	}
 
 	@Override
-	public Optional<GroupEntity> findById(Long id) {
-		return groupRepository.findById(id);
+	public Group findById(Long id) {
+		GroupEntity groupEntity = groupRepository.findById(id).orElseThrow(
+			() -> new IllegalArgumentException("Group not Exist")
+		);
+		return GroupMapper.toDomain(groupEntity);
 	}
 
 	/**
@@ -40,7 +41,12 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	 * @param group
 	 */
 	@Override
-	public Group update(Group group, GroupEntity groupEntity) {
+	public Group update(Group group) {
+
+		GroupEntity groupEntity = groupRepository.findById(group.getId()).orElseThrow(
+			() -> new IllegalArgumentException("group not Exist")
+		);
+
 		groupEntity.change(
 			group.getName(),
 			group.getCategory(),
@@ -48,8 +54,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 			group.getJoinPolicy(),
 			group.getVisibility(),
 			group.getMaxMember(),
-			group.getImageRefId(),
-			group.getMemberCount()
+			group.getImageRefId()
 		);
 
 		return GroupMapper.toDomain(groupEntity);
