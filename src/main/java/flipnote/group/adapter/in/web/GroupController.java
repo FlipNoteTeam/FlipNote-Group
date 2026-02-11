@@ -134,5 +134,13 @@ public class GroupController {
 
 		return ResponseEntity.noContent().build();
 	}
+	
+	//todo 그룹 내 멤버 조회
+
+	//todo 그룹 전체 조회
+
+	//todo 내 그룹 전체 조회
+
+	//todo 내가 생성한 그룹 전체 조회
 
 }
