@@ -27,22 +27,14 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	private static final Map<GroupMemberRole, List<GroupPermission>> DEFAULT_PERMS_BY_ROLE =
 		Map.of(
 			GroupMemberRole.OWNER, List.of(
-				GroupPermission.INVITE,
 				GroupPermission.KICK,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.HEAD_MANAGER, List.of(
-				GroupPermission.INVITE,
 				GroupPermission.KICK,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.MANAGER, List.of(
-				GroupPermission.INVITE,
-				GroupPermission.KICK,
-				GroupPermission.JOIN_REQUEST_MANAGE
-			),
-			GroupMemberRole.STAFF, List.of(
-				GroupPermission.INVITE,
 				GroupPermission.KICK,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
@@ -61,7 +53,6 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 				GroupMemberRole.OWNER,
 				GroupMemberRole.HEAD_MANAGER,
 				GroupMemberRole.MANAGER,
-				GroupMemberRole.STAFF,
 				GroupMemberRole.MEMBER
 			})
 			.collect(java.util.stream.Collectors.toMap(
