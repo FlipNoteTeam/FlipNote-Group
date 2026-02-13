@@ -38,6 +38,9 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	@Override
 	public void delete(Long groupId) {
+		if (!groupRepository.existsById(groupId)) {
+			throw new IllegalArgumentException("Group not Exist");
+		}
 		groupRepository.deleteById(groupId);
 	}
 }
