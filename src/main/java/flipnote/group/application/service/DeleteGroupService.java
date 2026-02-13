@@ -24,7 +24,7 @@ public class DeleteGroupService implements DeleteGroupUseCase {
 		//오너 인지 확인
 		boolean isOwner = groupRoleRepository.checkRole(cmd.userId(), cmd.groupId(), GroupMemberRole.OWNER);
 
-		//오너가 아닐 경우 삭제
+		//오너가 아닐 경우 에러 발생
 		if(!isOwner) {
 			throw new IllegalArgumentException("not owner");
 		}
