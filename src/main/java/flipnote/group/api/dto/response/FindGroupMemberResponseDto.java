@@ -10,6 +10,6 @@ public record FindGroupMemberResponseDto(
 ) {
 
 	public static FindGroupMemberResponseDto from(FindGroupMemberResult result) {
-		return new FindGroupMemberResponseDto(result.memberInfoList);
+		return new FindGroupMemberResponseDto(result.memberInfoList());
 	}
 }
