@@ -6,4 +6,6 @@ public interface GroupRepositoryPort {
     Long saveNewGroup(Group group);
 
     Group findById(Long id);
+
+    void delete(Long id);
 }

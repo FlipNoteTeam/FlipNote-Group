@@ -1,6 +1,7 @@
 package flipnote.group.adapter.in.web;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +18,11 @@ import flipnote.group.api.dto.response.CreateGroupResponseDto;
 import flipnote.group.api.dto.response.FindGroupResponseDto;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.CreateGroupUseCase;
+import flipnote.group.application.port.in.DeleteGroupUseCase;
 import flipnote.group.application.port.in.FindGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
+import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.in.command.FindGroupCommand;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,7 @@ public class GroupController {
 	private final CreateGroupUseCase createGroupUseCase;
 	private final ChangeGroupUseCase changeGroupUseCase;
 	private final FindGroupUseCase findGroupUseCase;
+	private final DeleteGroupUseCase deleteGroupUseCase;
 
 	/**
 	 * 그룹 생성 API
@@ -110,5 +114,33 @@ public class GroupController {
 
 		return ResponseEntity.ok(res);
 	}
+
+	/**
+	 * 그룹 삭제
+	 * todo 추후 권한 체크 후 권한 확인 후 삭제
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 */
+	@DeleteMapping("/{groupId}")
+	public ResponseEntity<Void> deleteGroup(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId
+	) {
+
+		DeleteGroupCommand cmd = new DeleteGroupCommand(userId, groupId);
+
+		deleteGroupUseCase.deleteGroup(cmd);
+
+		return ResponseEntity.noContent().build();
+	}
+	
+	//todo 그룹 내 멤버 조회
+
+	//todo 그룹 전체 조회
+
+	//todo 내 그룹 전체 조회
+
+	//todo 내가 생성한 그룹 전체 조회
 
 }
