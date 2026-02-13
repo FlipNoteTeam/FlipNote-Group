@@ -1,6 +1,7 @@
 package flipnote.group.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.application.port.in.DeleteGroupUseCase;
 import flipnote.group.application.port.in.command.DeleteGroupCommand;
@@ -17,6 +18,7 @@ public class DeleteGroupService implements DeleteGroupUseCase {
 	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	@Override
+	@Transactional
 	public void deleteGroup(DeleteGroupCommand cmd) {
 
 		//오너 인지 확인

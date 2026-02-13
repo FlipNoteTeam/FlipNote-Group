@@ -117,7 +117,7 @@ public class GroupController {
 
 	/**
 	 * 그룹 삭제
-	 * todo 추후 권환 체크 후 권환 확인 후 삭제
+	 * todo 추후 권한 체크 후 권한 확인 후 삭제
 	 * @param userId
 	 * @param groupId
 	 * @return
