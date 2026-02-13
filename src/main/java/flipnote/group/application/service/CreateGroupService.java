@@ -3,6 +3,7 @@ package flipnote.group.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.CreateGroupUseCase;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
@@ -37,10 +38,10 @@ public class CreateGroupService implements CreateGroupUseCase {
 		Long groupId = groupRepository.saveNewGroup(domainGroup);
 		
 		//그룹 역할 생성
-		Long roleId = groupRoleRepository.create(groupId);
+		RoleEntity role = groupRoleRepository.create(groupId);
 
 		//생성자 오너 역할로 저장
-		groupMemberRepository.save(groupId, cmd.userId(), roleId);
+		groupMemberRepository.save(groupId, cmd.userId(), role);
 		
 		return new CreateGroupResult(groupId);
 	}
