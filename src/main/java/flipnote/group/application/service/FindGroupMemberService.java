@@ -31,6 +31,6 @@ public class FindGroupMemberService implements FindGroupMemberUseCase {
 		
 		//todo 멤버 정보에서 유저 아이디를 grpc를 통해 가져온 후 반환
 
-		return new FindGroupMemberResult();
+		return new FindGroupMemberResult(memberInfoList);
 	}
 }
