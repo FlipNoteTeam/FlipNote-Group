@@ -41,7 +41,7 @@ public class JoinController {
 
 		ApplicationFormResult result = joinUseCase.joinRequest(cmd);
 
-		ApplicationFormResponseDto
+		ApplicationFormResponseDto res = ApplicationFormResponseDto.from(result.join());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(res);
 	}
