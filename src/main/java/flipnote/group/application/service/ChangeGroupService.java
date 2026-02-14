@@ -9,6 +9,7 @@ import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
+import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ChangeGroupService implements ChangeGroupUseCase {
 
 	private final GroupRepository jpaGroupRepository;
-	private final GroupRoleRepositoryAdapter groupRoleRepository;
+	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	/**
 	 * 그룹 수정
