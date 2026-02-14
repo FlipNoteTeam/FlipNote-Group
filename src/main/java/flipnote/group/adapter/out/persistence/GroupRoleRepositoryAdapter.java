@@ -12,7 +12,7 @@ import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
-import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepositoryRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRolePermissionRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 
 	private final GroupRoleRepository groupRoleRepository;
 	private final GroupRolePermissionRepository groupRolePermissionRepository;
-	private final GroupMemberRepositoryRepository groupMemberRepository;
+	private final GroupMemberRepository groupMemberRepository;
 
 	private static final Map<GroupMemberRole, List<GroupPermission>> DEFAULT_PERMS_BY_ROLE =
 		Map.of(

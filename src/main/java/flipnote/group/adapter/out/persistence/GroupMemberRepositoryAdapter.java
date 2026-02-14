@@ -8,16 +8,18 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
-import flipnote.group.domain.model.member.GroupMember;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
-import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepositoryRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
-	private final GroupMemberRepositoryRepository groupMemberRepository;
+	private final GroupRoleRepository groupRoleRepository;
+	private final GroupMemberRepository groupMemberRepository;
 
 	/**
 	 * 그룹 멤버 저장
@@ -25,8 +27,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	 * @param userId
 	 */
 	@Override
-	public void save(Long groupId, Long userId, RoleEntity role) {
-		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, role));
+	public void save(Long groupId, Long userId, GroupMemberRole role) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+
+		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, roleEntity));
 	}
 
 	/**
