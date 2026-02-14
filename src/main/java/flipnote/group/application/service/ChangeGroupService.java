@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChangeGroupService implements ChangeGroupUseCase {
 
-	private final GroupRepository jpaGroupRepository;
+	private final GroupRepository groupRepository;
 	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	/**
@@ -30,13 +30,14 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	@Transactional
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
-		GroupEntity entity = jpaGroupRepository.findById(cmd.groupId()).orElseThrow(
+		GroupEntity entity = groupRepository.findById(cmd.groupId()).orElseThrow(
 			() -> new IllegalArgumentException("group not Exists")
 		);
 
 		//오너 인지 확인
 		boolean isOwner = groupRoleRepository.checkRole(cmd.userId(), entity.getId(), GroupMemberRole.OWNER);
 
+		//todo 권한 부족 에러로 변경
 		if(!isOwner) {
 			throw new IllegalArgumentException("not owner");
 		}
