@@ -1,15 +1,16 @@
 package flipnote.group.application.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
+import flipnote.group.adapter.out.persistence.GroupRoleRepositoryAdapter;
 import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
+import flipnote.group.application.port.out.GroupRoleRepositoryPort;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChangeGroupService implements ChangeGroupUseCase {
 
-	private final GroupRepository jpaGroupRepository;
+	private final GroupRepository groupRepository;
+	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	/**
 	 * 그룹 수정
@@ -28,9 +30,17 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	@Transactional
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
-		GroupEntity entity = jpaGroupRepository.findById(cmd.groupId()).orElseThrow(
+		GroupEntity entity = groupRepository.findById(cmd.groupId()).orElseThrow(
 			() -> new IllegalArgumentException("group not Exists")
 		);
+
+		//오너 인지 확인
+		boolean isOwner = groupRoleRepository.checkRole(cmd.userId(), entity.getId(), GroupMemberRole.OWNER);
+
+		//todo 권한 부족 에러로 변경
+		if(!isOwner) {
+			throw new IllegalArgumentException("not owner");
+		}
 
 		entity.change(cmd);
 

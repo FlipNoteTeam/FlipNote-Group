@@ -1,6 +1,5 @@
 package flipnote.group.adapter.out.entity;
 
-import flipnote.group.domain.model.BaseEntity;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,19 +15,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
-@Table(
-	name = "group_members",
-	uniqueConstraints = {
-		@UniqueConstraint(
-			name = "uk_group_members_group_user",
-			columnNames = {"group_id", "user_id"}
-		)
-	}
+@Table(name = "group_roles",
+	uniqueConstraints = @UniqueConstraint(
+		name = "uk_group_roles_group_role",
+		columnNames = {"group_id", "group_role"}
+	)
 )
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupMemberEntity extends BaseEntity {
+public class RoleEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,30 +33,21 @@ public class GroupMemberEntity extends BaseEntity {
 	@Column(name = "group_id", nullable = false)
 	private Long groupId;
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
-
-	@Column(name = "group_role_id", nullable = false)
-	private Long groupRoleId;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 50, name = "group_role")
+	private GroupMemberRole role;
 
 	@Builder
-	private GroupMemberEntity(Long groupId, Long userId, Long groupRoleId) {
+	private RoleEntity(Long groupId, GroupMemberRole role) {
 		this.groupId = groupId;
-		this.userId = userId;
-		this.groupRoleId = groupRoleId;
+		this.role = role;
 	}
 
-	/**
-	 * 멤버 생성
-	 * @param groupId
-	 * @param userId
-	 * @return
-	 */
-	public static GroupMemberEntity create(Long groupId, Long userId, Long groupRoleId) {
-		return GroupMemberEntity.builder()
+	public static RoleEntity create(Long groupId, GroupMemberRole groupMemberRole) {
+		return RoleEntity.builder()
 			.groupId(groupId)
-			.userId(userId)
-			.groupRoleId(groupRoleId)
+			.role(groupMemberRole)
 			.build();
 	}
 }
+
