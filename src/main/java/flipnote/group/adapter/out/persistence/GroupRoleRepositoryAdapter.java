@@ -83,10 +83,8 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
-			() -> new IllegalArgumentException("not role")
-		);
-
-		return groupMemberRepository.existsByUserIdAndGroupRoleId(userId, roleEntity.getId());
+		return groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole)
+			.map(roleEntity -> groupMemberRepository.existsByUserIdAndGroupRoleId(userId, roleEntity.getId()))
+			.orElse(false);
 	}
 }
