@@ -1,7 +1,14 @@
 package flipnote.group.application.port.out;
 
-public interface GroupMemberRepositoryPort {
-    void save(Long groupId, Long userId, Long roleId);
+import java.util.List;
 
-    boolean existsUserInGroup(Long groupId, Long userId);
+import flipnote.group.adapter.out.entity.RoleEntity;
+import flipnote.group.domain.model.member.MemberInfo;
+
+public interface GroupMemberRepositoryPort {
+    void save(Long groupId, Long userId, RoleEntity role);
+
+    void existsUserInGroup(Long groupId, Long userId);
+
+    List<MemberInfo> findMemberInfo(Long groupId);
 }
