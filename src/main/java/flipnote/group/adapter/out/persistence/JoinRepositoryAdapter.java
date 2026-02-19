@@ -1,11 +1,12 @@
 package flipnote.group.adapter.out.persistence;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
 import flipnote.group.adapter.out.persistence.mapper.JoinMapper;
 import flipnote.group.application.port.out.JoinRepositoryPort;
-import flipnote.group.domain.model.group.Group;
 import flipnote.group.domain.model.join.JoinDomain;
 import flipnote.group.infrastructure.persistence.jpa.JoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,13 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 		joinRepository.save(entity);
 
 		return JoinMapper.toDomain(entity);
+	}
+
+	@Override
+	public List<JoinDomain> findFormList(Long groupId) {
+
+		List<JoinEntity> joinList = joinRepository.findAllByGroupId(groupId);
+
+		return JoinMapper.toDomains(joinList);
 	}
 }

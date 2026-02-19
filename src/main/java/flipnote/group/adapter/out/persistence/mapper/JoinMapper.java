@@ -1,5 +1,8 @@
 package flipnote.group.adapter.out.persistence.mapper;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
@@ -38,5 +41,15 @@ public class JoinMapper {
 			.form(entity.getForm())
 			.status(entity.getStatus())
 			.build();
+	}
+
+	public static List<JoinDomain> toDomains(List<JoinEntity> entities) {
+		if (entities == null || entities.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return entities.stream()
+			.map(JoinMapper::toDomain)
+			.toList();
 	}
 }

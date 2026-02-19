@@ -91,4 +91,16 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 
 		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
+
+	/**
+	 * 권한 체킁
+	 * @param userId
+	 * @param groupId
+	 * @param permission
+	 * @return
+	 */
+	@Override
+	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
+		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
+	}
 }
