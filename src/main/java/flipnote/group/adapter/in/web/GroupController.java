@@ -14,16 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 import flipnote.group.api.dto.request.ChangeGroupRequestDto;
 import flipnote.group.api.dto.request.CreateGroupRequestDto;
 import flipnote.group.api.dto.response.ChangeGroupResponseDto;
+import flipnote.group.api.dto.response.CheckOwnerResponseDto;
 import flipnote.group.api.dto.response.CreateGroupResponseDto;
 import flipnote.group.api.dto.response.FindGroupResponseDto;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
+import flipnote.group.application.port.in.CheckOwnerUseCase;
 import flipnote.group.application.port.in.CreateGroupUseCase;
 import flipnote.group.application.port.in.DeleteGroupUseCase;
 import flipnote.group.application.port.in.FindGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
+import flipnote.group.application.port.in.command.CheckOwnerCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.in.command.FindGroupCommand;
+import flipnote.group.application.port.in.result.CheckOwnerResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +40,7 @@ public class GroupController {
 	private final ChangeGroupUseCase changeGroupUseCase;
 	private final FindGroupUseCase findGroupUseCase;
 	private final DeleteGroupUseCase deleteGroupUseCase;
+	private final CheckOwnerUseCase checkOwnerUseCase;
 
 	/**
 	 * 그룹 생성 API
@@ -133,5 +138,23 @@ public class GroupController {
 		return ResponseEntity.noContent().build();
 	}
 
+	/**
+	 * 그룹 수정 권한 체크
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 */
+	@GetMapping("/{groupId}/managers")
+	public ResponseEntity<CheckOwnerResponseDto> checkManagerPermission(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId) {
 
+		CheckOwnerCommand cmd = new CheckOwnerCommand(userId, groupId);
+
+		CheckOwnerResult result = checkOwnerUseCase.checkOwner(cmd);
+
+		CheckOwnerResponseDto res = CheckOwnerResponseDto.from(result);
+
+		return ResponseEntity.ok(res);
+	}
 }

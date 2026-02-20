@@ -1,6 +1,7 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -62,5 +63,15 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		List<MemberInfo> memberInfo = GroupMemberMapper.toMemberInfo(entities);
 
 		return memberInfo;
+	}
+
+	@Override
+	public boolean checkOwner(Long groupId, Long userId) {
+
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("member not in group")
+		);
+
+		return groupMember.getRole().equals(GroupMemberRole.OWNER);
 	}
 }

@@ -12,4 +12,6 @@ public interface GroupMemberRepositoryPort {
     void existsUserInGroup(Long groupId, Long userId);
 
     List<MemberInfo> findMemberInfo(Long groupId);
+
+    boolean checkOwner(Long groupId, Long userId);
 }
