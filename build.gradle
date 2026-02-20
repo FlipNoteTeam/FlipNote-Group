@@ -63,47 +63,42 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
-
-def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
-
-tasks.named('compileJava', JavaCompile) {
-	options.generatedSourceOutputDirectory.set(querydslDir)
-}
-
 /**
  * proto 컴파일 설정
  * - .proto 위치: src/main/proto
  * - 생성 위치: build/generated/...
  */
 protobuf {
-	protoc {
-		artifact = "com.google.protobuf:protoc:4.33.2"
-	}
+	protoc { artifact = "com.google.protobuf:protoc:4.33.2" }
 	plugins {
-		grpc {
-			artifact = "io.grpc:protoc-gen-grpc-java:1.77.1"
-		}
+		grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.77.1" }
 	}
 	generateProtoTasks {
 		all().each { task ->
-			task.plugins {
-				grpc {}
-			}
+			task.plugins { grpc {} }
 		}
 	}
 }
+
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+def protoGeneratedDir = layout.buildDirectory.dir("generated/source/proto/main").get().asFile
 
 sourceSets {
 	main {
+		proto { srcDir "src/main/proto" }
 		java {
-			srcDirs += [
-					"$buildDir/generated/sources/proto/main/java",
-					"$buildDir/generated/sources/proto/main/grpc"
-			]
+			srcDirs querydslDir,
+					"$protoGeneratedDir/java",
+					"$protoGeneratedDir/grpc"
 		}
 	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+tasks.named('compileJava', JavaCompile) {
+	options.generatedSourceOutputDirectory.set(querydslDir)
+}
+
+// compileJava가 generateProto 이후에 실행되도록 보장
+tasks.named('compileJava') {
+	dependsOn tasks.named('generateProto')
 }
