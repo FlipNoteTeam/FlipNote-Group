@@ -17,6 +17,19 @@ public class GroupCommandService extends GroupCommandServiceGrpc.GroupCommandSer
 
 	@Override
 	public void getGroupName(GetGroupNameRequest request, StreamObserver<GetGroupNameResponse> responseObserver) {
+		try {
+			String groupName = findGroupNameUseCase.findGroupName(request.getGroupId());
+
+			GetGroupNameResponse res = GetGroupNameResponse.newBuilder()
+				.setGroupName(groupName)
+				.build();
+
+			responseObserver.onNext(res);
+			responseObserver.onCompleted();
+		} catch (Exception e) {
+			responseObserver.onError(e);
+		}
+
 
 
 

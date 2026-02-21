@@ -74,8 +74,10 @@ protobuf {
 		grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.77.1" }
 	}
 	generateProtoTasks {
-		all().each { task ->
-			task.plugins { grpc {} }
+		all().configureEach { task ->
+			task.plugins {
+				grpc {}
+			}
 		}
 	}
 }

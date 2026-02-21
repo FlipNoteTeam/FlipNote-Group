@@ -1,6 +1,12 @@
 spring:
+  port: 8084
+
   application:
     name: group
+
+  grpc:
+    server:
+      port: 9090
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
