@@ -49,16 +49,16 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	@Override
 	public List<GroupInfo> findAllByCursor(Long cursorId, Category category, int size) {
-		return List.of();
+		return groupRepository.findAllByCursor(cursorId, category, size);
 	}
 
 	@Override
 	public List<GroupInfo> findAllByCursorAndUserId(Long cursorId, Category category, int size, Long userId) {
-		return List.of();
+		return groupRepository.findAllByCursorAndUserId(cursorId, category, size, userId);
 	}
 
 	@Override
 	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId) {
-		return List.of();
+		return findAllByCursorAndCreatedUserId(cursorId, category, size, userId);
 	}
 }

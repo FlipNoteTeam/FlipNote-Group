@@ -5,8 +5,6 @@ import java.util.List;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.Group;
 import flipnote.group.domain.model.group.GroupInfo;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 public interface GroupRepositoryPort {
     Long saveNewGroup(Group group);
