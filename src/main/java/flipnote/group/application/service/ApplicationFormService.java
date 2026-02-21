@@ -84,7 +84,7 @@ public class ApplicationFormService implements JoinUseCase {
 			throw new IllegalArgumentException("not permission");
 		}
 
-		List<JoinDomain> joinDomainList = joinRepository.findFormList(cmd.groupId());
+		List<JoinDomain> joinDomainList = joinRepository.findJoinList(cmd.groupId());
 
 
 		return new FindJoinFormListResult(joinDomainList);

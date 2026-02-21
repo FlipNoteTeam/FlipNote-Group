@@ -34,7 +34,7 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	}
 
 	@Override
-	public List<JoinDomain> findFormList(Long groupId) {
+	public List<JoinDomain> findJoinList(Long groupId) {
 
 		List<JoinEntity> joinList = joinRepository.findAllByGroupId(groupId);
 
@@ -58,5 +58,12 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 		joinRepository.save(entity);
 
 		return JoinMapper.toDomain(entity);
+	}
+
+	@Override
+	public List<JoinDomain> findMyJoinList(Long userId) {
+		List<JoinEntity> joinList = joinRepository.findAllByUserId(userId);
+
+		return JoinMapper.toDomains(joinList);
 	}
 }

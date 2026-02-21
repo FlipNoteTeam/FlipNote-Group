@@ -12,4 +12,6 @@ public interface JoinRepository extends JpaRepository<JoinEntity, Long> {
 	boolean existsByUserIdAndGroupId(Long userId, Long groupId);
 
 	List<JoinEntity> findAllByGroupId(Long groupId);
+
+	List<JoinEntity> findAllByUserId(Long userId);
 }
