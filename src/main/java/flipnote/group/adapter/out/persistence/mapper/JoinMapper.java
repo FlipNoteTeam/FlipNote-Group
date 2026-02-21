@@ -52,4 +52,14 @@ public class JoinMapper {
 			.map(JoinMapper::toDomain)
 			.toList();
 	}
+
+	public static JoinEntity toEntity(JoinDomain domain) {
+		return JoinEntity.builder()
+			.id(domain.getId())
+			.groupId(domain.getGroupId())
+			.userId(domain.getUserId())
+			.form(domain.getForm())
+			.status(domain.getStatus())
+			.build();
+	}
 }

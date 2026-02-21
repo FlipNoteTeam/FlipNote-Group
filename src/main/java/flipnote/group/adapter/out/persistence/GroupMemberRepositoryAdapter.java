@@ -1,9 +1,11 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
@@ -11,6 +13,7 @@ import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +23,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 	private final GroupRoleRepository groupRoleRepository;
 	private final GroupMemberRepository groupMemberRepository;
+	private final GroupRepository groupRepository;
 
 	/**
 	 * 그룹 멤버 저장
@@ -32,6 +36,13 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
 
 		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, roleEntity));
+
+		GroupEntity groupEntity = groupRepository.findById(groupId).orElseThrow(
+			() -> new IllegalArgumentException("not exist group")
+		);
+
+		//그룹 엔티티 + 1
+		groupEntity.plusCount();
 	}
 
 	/**

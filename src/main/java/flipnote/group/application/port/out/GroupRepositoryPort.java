@@ -20,4 +20,6 @@ public interface GroupRepositoryPort {
 	List<GroupInfo> findAllByCursorAndUserId(Long cursorId, Category category, int size, Long userId);
 
 	List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId);
+
+	boolean checkJoinable(Long groupId);
 }

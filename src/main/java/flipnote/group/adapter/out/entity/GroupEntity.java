@@ -83,4 +83,22 @@ public class GroupEntity extends BaseEntity {
 		this.maxMember = cmd.maxMember();
 		this.imageRefId = cmd.imageRefId();
 	}
+
+	public void plusCount() {
+
+		if(this.memberCount+1 > this.maxMember) {
+			throw new IllegalArgumentException("max member");
+		}
+
+		this.memberCount++;
+	}
+
+	public void minusCount() {
+
+		if(this.memberCount-1 < 0) {
+			throw new IllegalArgumentException("not minus member");
+		}
+
+		this.memberCount--;
+	}
 }

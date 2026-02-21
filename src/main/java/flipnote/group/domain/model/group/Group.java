@@ -46,7 +46,7 @@ public class Group {
 		group.maxMember = cmd.maxMember();
 		group.imageRefId = cmd.imageRefId();
 
-		group.memberCount = 1;
+		group.memberCount = 0;
 
 		return group;
 	}

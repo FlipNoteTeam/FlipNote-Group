@@ -27,4 +27,8 @@ public class JoinDomain {
 		this.status = status;
 		this.form = form;
 	}
+
+	public void updateStatus(JoinStatus status) {
+		this.status = status;
+	}
 }

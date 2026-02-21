@@ -61,4 +61,19 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId) {
 		return List.of();
 	}
+
+	@Override
+	public boolean checkJoinable(Long groupId) {
+
+		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupId).orElseThrow(
+			() -> new IllegalArgumentException("not exists")
+		);
+
+		 int maxMember = groupEntity.getMaxMember();
+		 int count = groupEntity.getMemberCount();
+
+		 boolean joinable = maxMember > count;
+
+		return joinable;
+	}
 }
