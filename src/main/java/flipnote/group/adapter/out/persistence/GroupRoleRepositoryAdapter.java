@@ -103,4 +103,44 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
 		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
 	}
+
+	/**
+	 * 권한 추가
+	 * @param groupId
+	 * @param role
+	 * @param permission
+	 */
+	@Override
+	public List<GroupPermission> addPermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+
+		PermissionEntity permissionEntity = PermissionEntity.builder()
+			.groupRoleId(roleEntity.getId())
+			.permission(permission)
+			.build();
+
+		groupRolePermissionRepository.save(permissionEntity);
+
+		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(roleEntity.getId());
+
+		return permissions.stream()
+			.map(PermissionEntity::getPermission)
+			.toList();
+	}
+
+	/**
+	 * 역할에 권한 체크
+	 * @param role
+	 * @param groupId
+	 * @param permission
+	 * @return
+	 */
+	@Override
+	public boolean existPermission(GroupMemberRole role, Long groupId, GroupPermission permission) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+
+		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
+	}
 }
