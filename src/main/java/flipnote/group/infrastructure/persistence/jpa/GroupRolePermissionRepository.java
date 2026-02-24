@@ -13,4 +13,6 @@ public interface GroupRolePermissionRepository extends JpaRepository<PermissionE
 	boolean existsByGroupRoleIdAndPermission(Long id, GroupPermission permission);
 
 	List<PermissionEntity> findAllByGroupRoleId(Long id);
+
+	void deleteByGroupRoleIdAndPermission(Long id, GroupPermission permission);
 }

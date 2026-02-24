@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import flipnote.group.api.dto.request.AddPermissionRequestDto;
+import flipnote.group.api.dto.request.RemovePermissionRequestDto;
 import flipnote.group.api.dto.response.AddPermissionResponseDto;
+import flipnote.group.api.dto.response.RemovePermissionResponseDto;
 import flipnote.group.application.port.in.AddPermissionUseCase;
-import flipnote.group.application.port.in.command.AddPermissionCommand;
+import flipnote.group.application.port.in.RemovePermissionUseCase;
+import flipnote.group.application.port.in.command.PermissionCommand;
 import flipnote.group.application.port.in.result.AddPermissionResult;
+import flipnote.group.application.port.in.result.RemovePermissionResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class PermissionController {
 	
 	private final AddPermissionUseCase addPermissionUseCase;
+	private final RemovePermissionUseCase removePermissionUseCase;
 
 	/**
 	 * 하위 권한 추가
@@ -33,22 +38,31 @@ public class PermissionController {
 		@PathVariable("groupId") Long groupId,
 		@Valid @RequestBody AddPermissionRequestDto req) {
 
-		AddPermissionCommand cmd = new AddPermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
+		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
 
 		AddPermissionResult result = addPermissionUseCase.addPermission(cmd);
 
 		AddPermissionResponseDto res = AddPermissionResponseDto.from(result);
-		
+
+		return ResponseEntity.ok(res);
 	}
 
-	// //todo 하위 권한 삭제 -> 유저 아이디, 하위 그거, 하위 권한
-	// @DeleteMapping("/permissions")
-	// public ResponseEntity<?> changeDownPermission(
-	// 	@RequestHeader("X-USER-ID") Long userId,
-	// 	@PathVariable("groupId") Long groupId,
-	// 	@Valid @RequestBody DeletePermissionRequestDto req) {
-	//
-	// }
+	//todo 하위 권한 삭제
+	@DeleteMapping("/permissions")
+	public ResponseEntity<?> changeDownPermission(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId,
+		@Valid @RequestBody RemovePermissionRequestDto req) {
+
+		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
+
+		RemovePermissionResult result = removePermissionUseCase.removePermission(cmd);
+
+		RemovePermissionResponseDto res = RemovePermissionResponseDto.from(result);
+
+		return ResponseEntity.ok(res);
+	}
+
 
 	//todo 그룹 멤버 추방
 

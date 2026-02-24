@@ -16,4 +16,6 @@ public interface GroupRoleRepositoryPort {
 	List<GroupPermission> addPermission(Long groupId, GroupMemberRole role, GroupPermission permission);
 
 	boolean existPermission(GroupMemberRole groupMemberRole, Long aLong, GroupPermission permission);
+
+	List<GroupPermission> removePermission(Long groupId, GroupMemberRole role, GroupPermission permission);
 }

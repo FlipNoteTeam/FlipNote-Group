@@ -143,4 +143,24 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 
 		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
 	}
+
+	/**
+	 * 권한 삭제
+	 * @param groupId
+	 * @param role
+	 * @param permission
+	 * @return
+	 */
+	@Override
+	public List<GroupPermission> removePermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+		
+		groupRolePermissionRepository.deleteByGroupRoleIdAndPermission(roleEntity.getId(), permission);
+
+		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(roleEntity.getId());
+
+		return permissions.stream()
+			.map(PermissionEntity::getPermission)
+			.toList();
+	}
 }
