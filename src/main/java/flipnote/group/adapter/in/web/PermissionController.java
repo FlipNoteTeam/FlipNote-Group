@@ -47,7 +47,13 @@ public class PermissionController {
 		return ResponseEntity.ok(res);
 	}
 
-	//todo 하위 권한 삭제
+	/**
+	 * 하위 권한 삭제
+	 * @param userId
+	 * @param groupId
+	 * @param req
+	 * @return
+	 */
 	@DeleteMapping("/permissions")
 	public ResponseEntity<?> changeDownPermission(
 		@RequestHeader("X-USER-ID") Long userId,
