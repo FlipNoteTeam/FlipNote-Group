@@ -10,6 +10,7 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
+import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
@@ -73,5 +74,15 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		List<MemberInfo> memberInfo = GroupMemberMapper.toMemberInfo(entities);
 
 		return memberInfo;
+	}
+
+	@Override
+	public GroupMember findMyRole(Long groupId, Long userId) {
+
+		GroupMemberEntity entity = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("entity not exist")
+		);
+
+		return GroupMemberMapper.toDomain(entity);
 	}
 }

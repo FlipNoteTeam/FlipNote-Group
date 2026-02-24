@@ -3,6 +3,7 @@ package flipnote.group.application.port.out;
 import java.util.List;
 
 import flipnote.group.adapter.out.entity.RoleEntity;
+import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 
@@ -18,4 +19,6 @@ public interface GroupRoleRepositoryPort {
 	boolean existPermission(GroupMemberRole groupMemberRole, Long aLong, GroupPermission permission);
 
 	List<GroupPermission> removePermission(Long groupId, GroupMemberRole role, GroupPermission permission);
+
+	List<GroupPermission> findMyRolePermission(Long groupId, GroupMemberRole role);
 }

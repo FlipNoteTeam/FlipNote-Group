@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import flipnote.group.application.port.in.RemovePermissionUseCase;
 import flipnote.group.application.port.in.command.PermissionCommand;
-import flipnote.group.application.port.in.result.AddPermissionResult;
 import flipnote.group.application.port.in.result.RemovePermissionResult;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.permission.GroupPermission;
