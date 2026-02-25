@@ -21,12 +21,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 	/**
 	 * 그룹 멤버 저장
-	 * @param groupId
-	 * @param userId
+	 * @param groupMember
 	 */
 	@Override
-	public void save(Long groupId, Long userId, RoleEntity role) {
-		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, role));
+	public void save(GroupMemberEntity groupMember) {
+		groupMemberRepository.save(groupMember);
 	}
 
 	/**

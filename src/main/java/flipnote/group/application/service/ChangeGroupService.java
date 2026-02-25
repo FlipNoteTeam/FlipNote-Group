@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.persistence.GroupRoleRepositoryAdapter;
-import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
@@ -42,6 +41,8 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 
 		entity.change(cmd);
 
-		return new ChangeGroupResult(GroupMapper.toDomain(entity));
+		String imageUrl = "dummy";
+
+		return ChangeGroupResult.of(entity, imageUrl);
 	}
 }
