@@ -30,6 +30,7 @@ public class GroupMemberMapper {
 		return GroupMember.builder()
 			.id(entity.getId())
 			.groupId(entity.getGroupId())
+			.userId(entity.getUserId())
 			.role(entity.getRole())
 			.build();
 	}
