@@ -46,8 +46,13 @@ public class MemberController {
 		return ResponseEntity.ok(res);
 	}
 
-
-	//todo 그룹 멤버 추방
+	/**
+	 * 그룹 멤버 추방
+	 * @param userId
+	 * @param groupId
+	 * @param memberId
+	 * @return
+	 */
 	@DeleteMapping("/{memberId}")
 	public ResponseEntity<Void> kickGroupMember(
 		@RequestHeader("X-USER-ID") Long userId,
