@@ -15,4 +15,6 @@ public interface GroupMemberRepositoryPort {
     List<MemberInfo> findMemberInfo(Long groupId);
 
     GroupMember findMyRole(Long groupId, Long userId);
+
+    void deleteGroupMember(Long memberId);
 }

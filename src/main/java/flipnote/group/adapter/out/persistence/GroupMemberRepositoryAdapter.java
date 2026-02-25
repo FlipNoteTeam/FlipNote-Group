@@ -85,4 +85,9 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 		return GroupMemberMapper.toDomain(entity);
 	}
+
+	@Override
+	public void deleteGroupMember(Long memberId) {
+		groupMemberRepository.deleteById(memberId);
+	}
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import flipnote.group.adapter.out.entity.PermissionEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
-import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
@@ -29,15 +28,15 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	private static final Map<GroupMemberRole, List<GroupPermission>> DEFAULT_PERMS_BY_ROLE =
 		Map.of(
 			GroupMemberRole.OWNER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.HEAD_MANAGER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.MANAGER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.MEMBER, List.of()
