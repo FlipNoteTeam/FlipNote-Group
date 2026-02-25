@@ -65,6 +65,4 @@ public class MemberController {
 
 		return ResponseEntity.noContent().build();
 	}
-
-	//todo 가입 신청 허가
 }
