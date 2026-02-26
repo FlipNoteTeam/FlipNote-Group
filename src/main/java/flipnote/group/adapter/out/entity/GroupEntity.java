@@ -109,6 +109,10 @@ public class GroupEntity extends BaseEntity {
 	 * @param cmd
 	 */
 	private static void validate(CreateGroupCommand cmd) {
+		if (cmd == null) {
+			throw new IllegalArgumentException("command required");
+		}
+
 		if (cmd.name() == null || cmd.name().isBlank()) {
 			throw new IllegalArgumentException("name required");
 		}
