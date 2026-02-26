@@ -10,6 +10,10 @@ import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
+import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
+import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
+import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
+import flipnote.image.grpc.v1.Type;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +22,7 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 
 	private final GroupRepository jpaGroupRepository;
 	private final GroupRoleRepositoryAdapter groupRoleRepository;
+	private final ImageCommandServiceGrpc.ImageCommandServiceBlockingStub imageCommandServiceStub;
 
 	/**
 	 * 그룹 수정
@@ -41,7 +46,14 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 
 		entity.change(cmd);
 
-		String imageUrl = "dummy";
+		// gRPC로 image 서비스에 url 조회
+		GetUrlByReferenceRequest request = GetUrlByReferenceRequest.newBuilder()
+			.setReferenceType(Type.GROUP)
+			.setReferenceId(cmd.groupId())
+			.build();
+
+		GetUrlByReferenceResponse response = imageCommandServiceStub.getUrlByReference(request);
+		String imageUrl = response.getImageUrl();
 
 		return ChangeGroupResult.of(entity, imageUrl);
 	}
