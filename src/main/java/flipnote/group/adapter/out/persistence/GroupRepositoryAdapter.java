@@ -8,7 +8,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
-import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
+import flipnote.group.infrastructure.persistence.querydsl.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository

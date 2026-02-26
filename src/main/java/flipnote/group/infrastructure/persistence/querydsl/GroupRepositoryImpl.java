@@ -96,7 +96,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 			))
 			.from(groupMember)
 			.join(group).on(group.id.eq(groupMember.groupId))
-			.where(where)
+			.where(where.and(groupMember.deletedAt.isNull()))
 			.orderBy(group.id.desc())
 			.limit(pageSize + 1)
 			.fetch();
@@ -126,6 +126,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 			.join(groupMember).on(groupMember.groupId.eq(group.id))
 			.where(
 				group.deletedAt.isNull(),
+				groupMember.deletedAt.isNull(),
 				groupMember.userId.eq(userId),
 				groupMember.role.role.eq(GroupMemberRole.OWNER),
 				lastId != null ? group.id.lt(lastId) : null,
