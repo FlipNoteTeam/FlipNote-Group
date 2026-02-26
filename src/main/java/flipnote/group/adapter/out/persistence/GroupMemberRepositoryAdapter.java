@@ -1,23 +1,21 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
-import flipnote.group.adapter.out.entity.RoleEntity;
-import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
-import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.MemberInfo;
-import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepositoryRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
-	private final GroupMemberRepositoryRepository groupMemberRepository;
+	private final GroupMemberRepository groupMemberRepository;
 
 	/**
 	 * 그룹 멤버 저장
@@ -53,8 +51,9 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public List<MemberInfo> findMemberInfo(Long groupId) {
 		List<GroupMemberEntity> entities = groupMemberRepository.findAllByGroupId(groupId);
 
-		List<MemberInfo> memberInfo = GroupMemberMapper.toMemberInfo(entities);
 
-		return memberInfo;
+		return entities.stream()
+			.map(GroupMemberEntity::toMemberInfo)
+			.collect(Collectors.toList());
 	}
 }

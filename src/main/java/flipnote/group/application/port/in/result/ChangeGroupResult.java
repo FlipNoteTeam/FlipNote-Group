@@ -8,6 +8,7 @@ import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
 public record ChangeGroupResult(
+	Long id,
 	String name,
 	Category category,
 	String description,
@@ -22,6 +23,7 @@ public record ChangeGroupResult(
 ) {
 	public static ChangeGroupResult of(GroupEntity group, String imageUrl) {
 		return new ChangeGroupResult(
+			group.getId(),
 			group.getName(),
 			group.getCategory(),
 			group.getDescription(),

@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 
-public interface GroupMemberRepositoryRepository
+public interface GroupMemberRepository
 	extends JpaRepository<GroupMemberEntity, Long> {
-	boolean existsByUserIdAndGroupRoleId(Long userId, Long id);
+
+	boolean existsByUserIdAndRole_Id(Long userId, Long id);
 
 	boolean existsByGroupIdAndUserId(Long groupId, Long userId);
 

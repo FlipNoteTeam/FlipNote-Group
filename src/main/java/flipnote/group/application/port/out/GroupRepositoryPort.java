@@ -5,7 +5,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 public interface GroupRepositoryPort {
     Long saveNewGroup(GroupEntity group);
 
-    Group findById(Long id);
+    GroupEntity findById(Long id);
 
     void delete(Long id);
 }
