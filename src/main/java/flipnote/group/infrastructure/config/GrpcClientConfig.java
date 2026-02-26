@@ -1,5 +1,6 @@
 package flipnote.group.infrastructure.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,12 +11,19 @@ import io.grpc.ManagedChannelBuilder;
 @Configuration
 public class GrpcClientConfig {
 
+    @Bean(destroyMethod = "shutdownNow")
+    public ManagedChannel imageCommandChannel(
+        @Value("${grpc.image.address:localhost:9092}") String target
+    ) {
+        return ManagedChannelBuilder.forTarget(target)
+            .usePlaintext()
+            .build();
+    }
+
     @Bean
-    public ImageCommandServiceGrpc.ImageCommandServiceBlockingStub imageCommandServiceStub() {
-        ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 9090)
-                .usePlaintext()
-                .build();
-        return ImageCommandServiceGrpc.newBlockingStub(channel);
+    public ImageCommandServiceGrpc.ImageCommandServiceBlockingStub imageCommandServiceStub(
+        ManagedChannel imageCommandChannel
+    ) {
+        return ImageCommandServiceGrpc.newBlockingStub(imageCommandChannel);
     }
 }
