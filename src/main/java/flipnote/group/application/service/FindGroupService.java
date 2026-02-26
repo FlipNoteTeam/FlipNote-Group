@@ -15,6 +15,7 @@ import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
 import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
 import flipnote.image.grpc.v1.Type;
+import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -45,8 +46,17 @@ public class FindGroupService implements FindGroupUseCase {
 			.setReferenceId(cmd.groupId())
 			.build();
 
-		GetUrlByReferenceResponse response = imageCommandServiceStub.getUrlByReference(request);
-		String imageUrl = response.getImageUrl();
+		String imageUrl;
+		try {
+			GetUrlByReferenceResponse response = imageCommandServiceStub.getUrlByReference(request);
+			imageUrl = response.getImageUrl();
+		} catch (StatusRuntimeException e) {
+			switch (e.getStatus().getCode()) {
+				case NOT_FOUND -> throw new IllegalArgumentException("이미지를 찾을 수 없습니다.");
+				case INTERNAL -> throw new IllegalArgumentException("이미지 서버 내부 오류입니다.");
+				default -> throw new IllegalArgumentException("이미지 서비스 오류: " + e.getStatus().getDescription());
+			}
+		}
 
 		return FindGroupResult.of(group, imageUrl);
 	}
