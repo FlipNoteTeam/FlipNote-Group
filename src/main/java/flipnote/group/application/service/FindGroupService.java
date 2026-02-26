@@ -3,6 +3,7 @@ package flipnote.group.application.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.in.FindGroupUseCase;
@@ -30,6 +31,7 @@ public class FindGroupService implements FindGroupUseCase {
 	 * @return
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public FindGroupResult findGroup(FindGroupCommand cmd) {
 
 		// 유저가 그룹 내에 존재하는지 확인
