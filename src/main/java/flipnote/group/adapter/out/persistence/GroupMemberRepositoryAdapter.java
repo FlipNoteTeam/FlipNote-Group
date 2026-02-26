@@ -1,10 +1,13 @@
 package flipnote.group.adapter.out.persistence;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Repository;
 
-import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
+import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
-import flipnote.group.domain.model.member.GroupMemberRole;
+import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -16,12 +19,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 	/**
 	 * 그룹 멤버 저장
-	 * @param groupId
-	 * @param userId
+	 * @param groupMember
 	 */
 	@Override
-	public void save(Long groupId, Long userId, Long roleId) {
-		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, roleId));
+	public void save(GroupMemberEntity groupMember) {
+		groupMemberRepository.save(groupMember);
 	}
 
 	/**
@@ -31,7 +33,27 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	 * @return
 	 */
 	@Override
-	public boolean existsUserInGroup(Long groupId, Long userId) {
-		return groupMemberRepository.existsByGroupIdAndUserId(groupId, userId);
+	public void existsUserInGroup(Long groupId, Long userId) {
+
+		boolean isMember = groupMemberRepository.existsByGroupIdAndUserId(groupId, userId);
+
+		if(!isMember) {
+			throw new IllegalArgumentException("user not in Group");
+		}
+	}
+
+	/**
+	 * 그룹 멤버 아이디 조회
+	 * @param groupId
+	 * @return
+	 */
+	@Override
+	public List<MemberInfo> findMemberInfo(Long groupId) {
+		List<GroupMemberEntity> entities = groupMemberRepository.findAllByGroupId(groupId);
+
+
+		return entities.stream()
+			.map(GroupMemberEntity::toMemberInfo)
+			.collect(Collectors.toList());
 	}
 }

@@ -15,6 +15,7 @@ import flipnote.group.api.dto.request.ChangeGroupRequestDto;
 import flipnote.group.api.dto.request.CreateGroupRequestDto;
 import flipnote.group.api.dto.response.ChangeGroupResponseDto;
 import flipnote.group.api.dto.response.CreateGroupResponseDto;
+import flipnote.group.api.dto.response.FindGroupMemberResponseDto;
 import flipnote.group.api.dto.response.FindGroupResponseDto;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.CreateGroupUseCase;
@@ -24,6 +25,7 @@ import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.in.command.FindGroupCommand;
+import flipnote.group.application.port.in.command.FindGroupMemberCommand;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -125,8 +127,7 @@ public class GroupController {
 	@DeleteMapping("/{groupId}")
 	public ResponseEntity<Void> deleteGroup(
 		@RequestHeader("X-USER-ID") Long userId,
-		@PathVariable("groupId") Long groupId
-	) {
+		@PathVariable("groupId") Long groupId) {
 
 		DeleteGroupCommand cmd = new DeleteGroupCommand(userId, groupId);
 
@@ -134,8 +135,6 @@ public class GroupController {
 
 		return ResponseEntity.noContent().build();
 	}
-	
-	//todo 그룹 내 멤버 조회
 
 	//todo 그룹 전체 조회
 
@@ -143,6 +142,5 @@ public class GroupController {
 
 	//todo 내가 생성한 그룹 전체 조회
 
-	//todo 하위 권한 수정
 
 }

@@ -3,6 +3,7 @@ package flipnote.group.adapter.out.persistence;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,30 +48,33 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 * @return
 	 */
 	@Override
-	public Long create(Long groupId) {
-		// 오너 역할 생성
-		Map<GroupMemberRole, Long> roleIdByRole = Arrays.stream(new GroupMemberRole[]{
+	public RoleEntity create(Long groupId) {
+		// 역할 생성
+		Map<GroupMemberRole, RoleEntity> roleEntityByRole =
+			Arrays.stream(new GroupMemberRole[]{
 				GroupMemberRole.OWNER,
 				GroupMemberRole.HEAD_MANAGER,
 				GroupMemberRole.MANAGER,
 				GroupMemberRole.MEMBER
-			})
-			.collect(java.util.stream.Collectors.toMap(
+			}).collect(Collectors.toMap(
 				role -> role,
-				role -> groupRoleRepository.save(RoleEntity.create(groupId, role)).getId()
+				role -> groupRoleRepository.save(RoleEntity.create(groupId, role))
 			));
 
-		// 역할별 기본 권한 세팅 (role-permission 매핑 생성)
+		// 권한 매핑 생성
 		List<PermissionEntity> perms = DEFAULT_PERMS_BY_ROLE.entrySet().stream()
 			.flatMap(e -> e.getValue().stream()
-				.map(p -> PermissionEntity.create(roleIdByRole.get(e.getKey()), p))
+				.map(p -> PermissionEntity.create(
+					roleEntityByRole.get(e.getKey()).getId(),  // roleId 사용
+					p
+				))
 			)
 			.toList();
 
 		groupRolePermissionRepository.saveAll(perms);
 
 		// 그룹 생성자에게 OWNER roleId 리턴 (바깥에서 group_members 생성할 때 사용)
-		return roleIdByRole.get(GroupMemberRole.OWNER);
+		return roleEntityByRole.get(GroupMemberRole.OWNER);
 	}
 
 	/**
@@ -83,8 +87,10 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
-		return groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole)
-			.map(roleEntity -> groupMemberRepository.existsByUserIdAndGroupRoleId(userId, roleEntity.getId()))
-			.orElse(false);
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
+			() -> new IllegalArgumentException("not exist member")
+		);
+
+		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
 }

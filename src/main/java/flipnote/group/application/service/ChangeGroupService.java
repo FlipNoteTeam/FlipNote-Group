@@ -5,21 +5,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.persistence.GroupRoleRepositoryAdapter;
-import flipnote.group.adapter.out.persistence.mapper.GroupMapper;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
-import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
+import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
+import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
+import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
+import flipnote.image.grpc.v1.Type;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ChangeGroupService implements ChangeGroupUseCase {
 
-	private final GroupRepository groupRepository;
-	private final GroupRoleRepositoryPort groupRoleRepository;
+	private final GroupRepository jpaGroupRepository;
+	private final GroupRoleRepositoryAdapter groupRoleRepository;
+	private final ImageCommandServiceGrpc.ImageCommandServiceBlockingStub imageCommandServiceStub;
 
 	/**
 	 * 그룹 수정
@@ -30,20 +33,28 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	@Transactional
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
-		GroupEntity entity = groupRepository.findById(cmd.groupId()).orElseThrow(
+		GroupEntity entity = jpaGroupRepository.findById(cmd.groupId()).orElseThrow(
 			() -> new IllegalArgumentException("group not Exists")
 		);
 
 		//오너 인지 확인
 		boolean isOwner = groupRoleRepository.checkRole(cmd.userId(), entity.getId(), GroupMemberRole.OWNER);
 
-		//todo 권한 부족 에러로 변경
 		if(!isOwner) {
 			throw new IllegalArgumentException("not owner");
 		}
 
 		entity.change(cmd);
 
-		return new ChangeGroupResult(GroupMapper.toDomain(entity));
+		// gRPC로 image 서비스에 url 조회
+		GetUrlByReferenceRequest request = GetUrlByReferenceRequest.newBuilder()
+			.setReferenceType(Type.GROUP)
+			.setReferenceId(cmd.groupId())
+			.build();
+
+		GetUrlByReferenceResponse response = imageCommandServiceStub.getUrlByReference(request);
+		String imageUrl = response.getImageUrl();
+
+		return ChangeGroupResult.of(entity, imageUrl);
 	}
 }

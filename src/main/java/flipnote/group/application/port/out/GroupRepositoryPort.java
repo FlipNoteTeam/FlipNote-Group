@@ -1,11 +1,11 @@
 package flipnote.group.application.port.out;
 
-import flipnote.group.domain.model.group.Group;
+import flipnote.group.adapter.out.entity.GroupEntity;
 
 public interface GroupRepositoryPort {
-    Long saveNewGroup(Group group);
+    Long saveNewGroup(GroupEntity group);
 
-    Group findById(Long id);
+    GroupEntity findById(Long id);
 
     void delete(Long id);
 }
