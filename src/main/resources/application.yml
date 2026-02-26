@@ -8,10 +8,8 @@ spring:
   grpc:
     server:
       port: 9094
-    client:
-      channels:
-        image-service:
-          address: {GRPC_URL:localhost:9092}
+    image:
+      address: ${GRPC_IMAGE_URL:localhost:9092}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
