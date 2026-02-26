@@ -19,7 +19,6 @@ import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
 import flipnote.image.grpc.v1.Type;
 import io.grpc.StatusRuntimeException;
-import flipnote.group.domain.model.group.Group;
 import flipnote.group.domain.model.group.GroupInfo;
 import lombok.RequiredArgsConstructor;
 

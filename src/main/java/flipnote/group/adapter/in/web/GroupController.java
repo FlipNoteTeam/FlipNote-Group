@@ -3,6 +3,7 @@ package flipnote.group.adapter.in.web;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import flipnote.group.api.dto.request.ChangeGroupRequestDto;
 import flipnote.group.api.dto.request.CreateGroupRequestDto;
+import flipnote.group.api.dto.request.GroupListRequestDto;
 import flipnote.group.api.dto.response.ChangeGroupResponseDto;
 import flipnote.group.api.dto.response.CreateGroupResponseDto;
+import flipnote.group.api.dto.response.CursorPagingResponseDto;
 import flipnote.group.api.dto.response.FindGroupResponseDto;
 import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.CreateGroupUseCase;
@@ -24,6 +27,7 @@ import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.command.CreateGroupCommand;
 import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.in.command.FindGroupCommand;
+import flipnote.group.domain.model.group.GroupInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -133,5 +137,38 @@ public class GroupController {
 		return ResponseEntity.noContent().build();
 	}
 
+
+	//그룹 전체 조회
+	@GetMapping
+	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findGroup(
+		@RequestHeader("X-USER-ID") Long userId,
+		@Valid @ModelAttribute GroupListRequestDto req
+	) {
+		CursorPagingResponseDto<GroupInfo> res = findGroupUseCase.findAllGroup(userId, req);
+
+		return ResponseEntity.ok(res);
+	}
+
+	//내 그룹 전체 조회
+	@GetMapping("/me")
+	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findMyGroup(
+		@RequestHeader("X-USER-ID") Long userId,
+		@Valid @ModelAttribute GroupListRequestDto req
+	) {
+		CursorPagingResponseDto<GroupInfo> res = findGroupUseCase.findMyGroup(userId, req);
+
+		return ResponseEntity.ok(res);
+	}
+
+	//내가 생성한 그룹 전체 조회
+	@GetMapping("/created")
+	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findCreatedGroup(
+		@RequestHeader("X-USER-ID") Long userId,
+		@Valid @ModelAttribute GroupListRequestDto req
+	) {
+		CursorPagingResponseDto<GroupInfo> res = findGroupUseCase.findCreatedGroup(userId, req);
+
+		return ResponseEntity.ok(res);
+	}
 
 }
