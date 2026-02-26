@@ -137,8 +137,12 @@ public class GroupController {
 		return ResponseEntity.noContent().build();
 	}
 
-
-	//그룹 전체 조회
+	/**
+	 * 그룹 전체 조회
+	 * @param userId
+	 * @param req
+	 * @return
+	 */
 	@GetMapping
 	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findGroup(
 		@RequestHeader("X-USER-ID") Long userId,
@@ -149,7 +153,12 @@ public class GroupController {
 		return ResponseEntity.ok(res);
 	}
 
-	//내 그룹 전체 조회
+	/**
+	 * 내가 가입한 그룹 전체 조회
+	 * @param userId
+	 * @param req
+	 * @return
+	 */
 	@GetMapping("/me")
 	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findMyGroup(
 		@RequestHeader("X-USER-ID") Long userId,
@@ -160,7 +169,12 @@ public class GroupController {
 		return ResponseEntity.ok(res);
 	}
 
-	//내가 생성한 그룹 전체 조회
+	/**
+	 * 내가 생성한 그룹 전체 조회
+	 * @param userId
+	 * @param req
+	 * @return
+	 */
 	@GetMapping("/created")
 	public ResponseEntity<CursorPagingResponseDto<GroupInfo>> findCreatedGroup(
 		@RequestHeader("X-USER-ID") Long userId,

@@ -103,7 +103,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 	}
 
 	/**
-	 * 그룹 테이블에 생성한 유저 추가
+	 * 내가 생성한 그룹 전체 조회
 	 * @param lastId
 	 * @param category
 	 * @param pageSize
