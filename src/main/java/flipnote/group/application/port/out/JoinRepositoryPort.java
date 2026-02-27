@@ -1,0 +1,13 @@
+package flipnote.group.application.port.out;
+
+import java.util.List;
+
+import flipnote.group.adapter.out.entity.JoinEntity;
+
+public interface JoinRepositoryPort {
+	boolean existsJoin(Long groupId, Long userId);
+
+	void save(JoinEntity join);
+
+	List<JoinEntity> findFormList(Long groupId);
+}
