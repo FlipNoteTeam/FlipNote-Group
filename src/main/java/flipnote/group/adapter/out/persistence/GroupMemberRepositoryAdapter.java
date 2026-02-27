@@ -30,7 +30,6 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	 * 유저가 그룹 내에 있는지 체크
 	 * @param groupId
 	 * @param userId
-	 * @return
 	 */
 	@Override
 	public void existsUserInGroup(Long groupId, Long userId) {
