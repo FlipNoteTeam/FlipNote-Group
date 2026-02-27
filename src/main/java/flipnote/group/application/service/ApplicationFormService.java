@@ -5,17 +5,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import flipnote.group.adapter.out.persistence.GroupMemberRepositoryAdapter;
-import flipnote.group.adapter.out.persistence.GroupRepositoryAdapter;
-import flipnote.group.adapter.out.persistence.GroupRoleRepositoryAdapter;
-import flipnote.group.adapter.out.persistence.JoinRepositoryAdapter;
+import flipnote.group.adapter.out.entity.GroupEntity;
+import flipnote.group.adapter.out.entity.GroupMemberEntity;
+import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.adapter.out.persistence.mapper.JoinMapper;
 import flipnote.group.application.port.in.JoinUseCase;
 import flipnote.group.application.port.in.command.ApplicationFormCommand;
 import flipnote.group.application.port.in.command.FindJoinFormCommand;
 import flipnote.group.application.port.in.result.ApplicationFormResult;
 import flipnote.group.application.port.in.result.FindJoinFormListResult;
-import flipnote.group.domain.model.group.Group;
+import flipnote.group.application.port.out.GroupMemberRepositoryPort;
+import flipnote.group.application.port.out.GroupRepositoryPort;
+import flipnote.group.application.port.out.GroupRoleRepositoryPort;
+import flipnote.group.application.port.out.JoinRepositoryPort;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 import flipnote.group.domain.model.join.JoinDomain;
@@ -28,10 +30,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationFormService implements JoinUseCase {
 	
-	private final GroupRepositoryAdapter groupRepository;
-	private final JoinRepositoryAdapter joinRepository;
-	private final GroupMemberRepositoryAdapter groupMemberRepository;
-	private final GroupRoleRepositoryAdapter groupRoleRepository;
+	private final GroupRepositoryPort groupRepository;
+	private final JoinRepositoryPort joinRepository;
+	private final GroupMemberRepositoryPort groupMemberRepository;
+	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	private static final GroupPermission JOIN_MANAGE = GroupPermission.JOIN_REQUEST_MANAGE;
 
@@ -45,7 +47,7 @@ public class ApplicationFormService implements JoinUseCase {
 	public ApplicationFormResult joinRequest(ApplicationFormCommand cmd) {
 
 		//그룹 조회
-		Group group = groupRepository.findById(cmd.groupId());
+		GroupEntity group = groupRepository.findById(cmd.groupId());
 		
 		checkJoinable(group);
 
@@ -64,7 +66,10 @@ public class ApplicationFormService implements JoinUseCase {
 		JoinDomain join = joinRepository.save(domain);
 
 		if(join.getStatus().equals(JoinStatus.ACCEPT)) {
-			groupMemberRepository.save(cmd.groupId(), cmd.userId(), GroupMemberRole.MEMBER);
+			RoleEntity role = groupRoleRepository.findByIdAndRole(group.getId(), GroupMemberRole.MEMBER);
+
+			GroupMemberEntity groupMember = GroupMemberEntity.create(group.getId(), cmd.userId(), role);
+			groupMemberRepository.save(groupMember);
 		}
 
 		return new ApplicationFormResult(join);
@@ -90,7 +95,7 @@ public class ApplicationFormService implements JoinUseCase {
 		return new FindJoinFormListResult(joinDomainList);
 	}
 
-	private void checkJoinable(Group group) {
+	private void checkJoinable(GroupEntity group) {
 		//비공개 그룹 인지 확인
 		if(group.getVisibility().equals(Visibility.PRIVATE)) {
 			throw new IllegalArgumentException("private group");
@@ -100,6 +105,5 @@ public class ApplicationFormService implements JoinUseCase {
 		if(group.getMemberCount() >= group.getMaxMember()) {
 			throw new IllegalArgumentException("max member");
 		}
-
 	}
 }
