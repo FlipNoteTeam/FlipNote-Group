@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +55,15 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		return entities.stream()
 			.map(GroupMemberEntity::toMemberInfo)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean checkOwner(Long groupId, Long userId) {
+
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("member not in group")
+		);
+
+		return groupMember.getRole().equals(GroupMemberRole.OWNER);
 	}
 }
