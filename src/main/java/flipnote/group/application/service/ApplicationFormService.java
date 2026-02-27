@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
+import flipnote.group.adapter.out.entity.JoinEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
-import flipnote.group.adapter.out.persistence.mapper.JoinMapper;
 import flipnote.group.application.port.in.JoinUseCase;
 import flipnote.group.application.port.in.command.ApplicationFormCommand;
 import flipnote.group.application.port.in.command.FindJoinFormCommand;
@@ -20,7 +20,6 @@ import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.application.port.out.JoinRepositoryPort;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
-import flipnote.group.domain.model.join.JoinDomain;
 import flipnote.group.domain.model.join.JoinStatus;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
@@ -57,13 +56,13 @@ public class ApplicationFormService implements JoinUseCase {
 		}
 
 		JoinStatus status = JoinStatus.ACCEPT;
-		if(group.getJoinPolicy().equals(JoinPolicy.OPEN)) {
+		if(group.getJoinPolicy().equals(JoinPolicy.APPROVAL)) {
 			status = JoinStatus.PENDING;
 		}
 
-		JoinDomain domain = JoinMapper.createNewDomain(cmd.groupId(), cmd.userId(), cmd.joinIntro(), status);
+		JoinEntity join = JoinEntity.create(cmd.groupId(), cmd.userId(), cmd.joinIntro(), status);
 
-		JoinDomain join = joinRepository.save(domain);
+		joinRepository.save(join);
 
 		if(join.getStatus().equals(JoinStatus.ACCEPT)) {
 			RoleEntity role = groupRoleRepository.findByIdAndRole(group.getId(), GroupMemberRole.MEMBER);
@@ -72,7 +71,7 @@ public class ApplicationFormService implements JoinUseCase {
 			groupMemberRepository.save(groupMember);
 		}
 
-		return new ApplicationFormResult(join);
+		return ApplicationFormResult.of(join);
 	}
 
 	/**
@@ -89,10 +88,10 @@ public class ApplicationFormService implements JoinUseCase {
 			throw new IllegalArgumentException("not permission");
 		}
 
-		List<JoinDomain> joinDomainList = joinRepository.findFormList(cmd.groupId());
+		List<JoinEntity> joinDomainList = joinRepository.findFormList(cmd.groupId());
 
 
-		return new FindJoinFormListResult(joinDomainList);
+		return FindJoinFormListResult.of(joinDomainList);
 	}
 
 	private void checkJoinable(GroupEntity group) {

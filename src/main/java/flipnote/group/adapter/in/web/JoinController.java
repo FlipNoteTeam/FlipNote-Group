@@ -45,13 +45,14 @@ public class JoinController {
 
 		ApplicationFormResult result = joinUseCase.joinRequest(cmd);
 
-		ApplicationFormResponseDto res = ApplicationFormResponseDto.from(result.join());
+		ApplicationFormResponseDto res = ApplicationFormResponseDto.from(result);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(res);
 	}
 
 	/**
-	 * 그룹 가입 신청 리스트 조회
+	 * 해당 그룹 가입 신청 리스트 조회
+	 * todo 유저 닉네임 추가
 	 * @param userId
 	 * @param groupId
 	 * @return
