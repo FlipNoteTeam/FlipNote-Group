@@ -10,7 +10,7 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 public interface GroupMemberRepository
 	extends JpaRepository<GroupMemberEntity, Long> {
 
-	boolean existsByUserIdAndRole_Id(Long userId, Long id);
+	boolean existsByUserIdAndRole_Id(Long userId, Long roleId);
 
 	boolean existsByGroupIdAndUserId(Long groupId, Long userId);
 
