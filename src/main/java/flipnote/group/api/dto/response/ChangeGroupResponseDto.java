@@ -2,9 +2,9 @@ package flipnote.group.api.dto.response;
 
 import java.time.LocalDateTime;
 
+import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
 import flipnote.group.domain.model.group.Category;
-import flipnote.group.domain.model.group.Group;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 
@@ -31,19 +31,17 @@ public record ChangeGroupResponseDto(
 ) {
 	public static ChangeGroupResponseDto from(ChangeGroupResult result) {
 
-		Group group = result.group();
-
 		return new ChangeGroupResponseDto(
-			group.getId(),
-			group.getName(),
-			group.getCategory(),
-			group.getDescription(),
-			group.getJoinPolicy(),
-			group.getVisibility(),
-			group.getMaxMember(),
-			group.getImageRefId(),
-			group.getCreatedAt(),
-			group.getModifiedAt()
+			result.id(),
+			result.name(),
+			result.category(),
+			result.description(),
+			result.joinPolicy(),
+			result.visibility(),
+			result.maxMember(),
+			result.imageRefId(),
+			result.createdAt(),
+			result.modifiedAt()
 		);
 	}
 }

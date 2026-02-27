@@ -1,6 +1,6 @@
-package flipnote.group.domain.model.member;
+package flipnote.group.domain.model.role;
 
-import flipnote.group.adapter.out.entity.RoleEntity;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GroupMember {
+public class GroupRole {
 	private Long id;
 	private Long groupId;
-	private Long userId;
-	private RoleEntity role;
+	private GroupMemberRole role;
 
 	@Builder
-	private GroupMember(Long id, Long groupId, Long userId, RoleEntity role) {
+	private GroupRole(Long id, Long groupId, GroupMemberRole role) {
 		this.id = id;
 		this.groupId = groupId;
-		this.userId = userId;
 		this.role = role;
 	}
 }

@@ -30,10 +30,6 @@ public class JoinEntity extends BaseEntity {
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JoinColumn(name = "group_id", nullable = false)
-	// private GroupEntity group;
-
 	@Column(name = "group_id", nullable = false)
 	private Long groupId;
 
@@ -50,5 +46,14 @@ public class JoinEntity extends BaseEntity {
 		this.groupId = groupId;
 		this.status = status;
 		this.form = form;
+	}
+
+	public static JoinEntity create(Long groupId, Long userId, String form, JoinStatus status) {
+		return JoinEntity.builder()
+			.groupId(groupId)
+			.userId(userId)
+			.form(form)
+			.status(status)
+			.build();
 	}
 }
