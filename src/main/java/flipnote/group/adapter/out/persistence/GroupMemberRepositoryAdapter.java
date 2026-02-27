@@ -2,12 +2,12 @@ package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
+import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
