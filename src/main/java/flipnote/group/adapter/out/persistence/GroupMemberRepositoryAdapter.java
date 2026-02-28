@@ -1,45 +1,46 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
-import flipnote.group.adapter.out.entity.RoleEntity;
-import flipnote.group.adapter.out.persistence.mapper.GroupMemberMapper;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
-import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
-	private final GroupRoleRepository groupRoleRepository;
 	private final GroupMemberRepository groupMemberRepository;
+	private final GroupRepository groupRepository;
 
 	/**
 	 * 그룹 멤버 저장
-	 * @param groupId
-	 * @param userId
+	 * @param groupMember
 	 */
 	@Override
-	public void save(Long groupId, Long userId, GroupMemberRole role) {
+	public void save(GroupMemberEntity groupMember) {
+		groupMemberRepository.save(groupMember);
 
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
+			() -> new IllegalArgumentException("not exist group")
+		);
 
-		groupMemberRepository.save(GroupMemberMapper.create(groupId, userId, roleEntity));
+		//그룹 엔티티 + 1
+		groupEntity.plusCount();
 	}
 
 	/**
 	 * 유저가 그룹 내에 있는지 체크
 	 * @param groupId
 	 * @param userId
-	 * @return
 	 */
 	@Override
 	public void existsUserInGroup(Long groupId, Long userId) {
@@ -60,9 +61,10 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public List<MemberInfo> findMemberInfo(Long groupId) {
 		List<GroupMemberEntity> entities = groupMemberRepository.findAllByGroupId(groupId);
 
-		List<MemberInfo> memberInfo = GroupMemberMapper.toMemberInfo(entities);
 
-		return memberInfo;
+		return entities.stream()
+			.map(GroupMemberEntity::toMemberInfo)
+			.collect(Collectors.toList());
 	}
 
 	@Override

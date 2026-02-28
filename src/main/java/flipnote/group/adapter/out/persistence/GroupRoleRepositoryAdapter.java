@@ -103,4 +103,9 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
 		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
 	}
+
+	@Override
+	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
+		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole);
+	}
 }

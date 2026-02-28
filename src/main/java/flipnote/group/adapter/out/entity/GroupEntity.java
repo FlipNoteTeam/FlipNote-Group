@@ -83,4 +83,74 @@ public class GroupEntity extends BaseEntity {
 		this.maxMember = cmd.maxMember();
 		this.imageRefId = cmd.imageRefId();
 	}
+
+	/**
+	 * 신규로 그룹 생성
+	 * @param cmd
+	 * @return
+	 */
+	public static GroupEntity create(CreateGroupCommand cmd) {
+		validate(cmd);
+
+		return GroupEntity.builder()
+			.name(cmd.name())
+			.category(cmd.category())
+			.description(cmd.description())
+			.joinPolicy(cmd.joinPolicy())
+			.visibility(cmd.visibility())
+			.maxMember(cmd.maxMember())
+			.imageRefId(cmd.imageRefId())
+			.memberCount(0)
+			.build();
+	}
+
+	/**
+	 * 파라미터 검증
+	 * @param cmd
+	 */
+	private static void validate(CreateGroupCommand cmd) {
+		if (cmd == null) {
+			throw new IllegalArgumentException("command required");
+		}
+
+		if (cmd.name() == null || cmd.name().isBlank()) {
+			throw new IllegalArgumentException("name required");
+		}
+		if (cmd.maxMember() < 1 || cmd.maxMember() > 100) {
+			throw new IllegalArgumentException("maxMember invalid");
+		}
+		if (cmd.category() == null) {
+			throw new IllegalArgumentException("category required");
+		}
+		if (cmd.joinPolicy() == null) {
+			throw new IllegalArgumentException("join required");
+		}
+		if (cmd.visibility() == null) {
+			throw new IllegalArgumentException("visibility required");
+		}
+		if (cmd.description() == null || cmd.description().isBlank()) {
+			throw new IllegalArgumentException("description required");
+		}
+		if (cmd.name().length() > 50) {
+			throw new IllegalArgumentException("name too long");
+		}
+	}
+
+	public void plusCount() {
+
+		if(this.memberCount+1 > this.maxMember) {
+			throw new IllegalArgumentException("max member");
+		}
+
+		this.memberCount++;
+	}
+
+	public void minusCount() {
+
+		if(this.memberCount-1 < 0) {
+			throw new IllegalArgumentException("not minus member");
+		}
+
+		this.memberCount--;
+	}
 }
