@@ -2,9 +2,9 @@ package flipnote.group.application.service;
 
 import org.springframework.stereotype.Service;
 
+import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.in.FindGroupNameUseCase;
 import flipnote.group.application.port.out.GroupRepositoryPort;
-import flipnote.group.domain.model.group.Group;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,7 +21,7 @@ public class FindGroupNameService implements FindGroupNameUseCase {
 	@Override
 	public String findGroupName(Long groupId) {
 
-		Group group = groupRepository.findById(groupId);
+		GroupEntity group = groupRepository.findById(groupId);
 
 		return group.getName();
 	}

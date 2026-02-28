@@ -30,9 +30,6 @@ public class GroupCommandService extends GroupCommandServiceGrpc.GroupCommandSer
 			responseObserver.onError(e);
 		}
 
-
-
-
 		super.getGroupName(request, responseObserver);
 	}
 }
