@@ -29,7 +29,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public void save(GroupMemberEntity groupMember) {
 		groupMemberRepository.save(groupMember);
 
-		GroupEntity groupEntity = groupRepository.findById(groupMember.getGroupId()).orElseThrow(
+		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
 			() -> new IllegalArgumentException("not exist group")
 		);
 
