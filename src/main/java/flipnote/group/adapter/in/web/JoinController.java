@@ -93,7 +93,7 @@ public class JoinController {
 		@PathVariable("joinId") Long joinId,
 		@Valid @RequestBody JoinRespondRequestDto req) {
 
-		JoinRespondCommand cmd = new JoinRespondCommand(groupId, userId, joinId, req.status());
+		JoinRespondCommand cmd = new JoinRespondCommand(groupId, userId, joinId, req.joinStatus());
 
 		JoinRespondResult result = joinRespondUseCase.joinRespond(cmd);
 
