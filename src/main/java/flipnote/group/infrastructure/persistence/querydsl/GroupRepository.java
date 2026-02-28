@@ -1,4 +1,4 @@
-package flipnote.group.infrastructure.persistence.jpa;
+package flipnote.group.infrastructure.persistence.querydsl;
 
 import java.util.Optional;
 
@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import flipnote.group.adapter.out.entity.GroupEntity;
 import jakarta.persistence.LockModeType;
 
-public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
+public interface GroupRepository extends JpaRepository<GroupEntity, Long>, GroupRepositoryCustom {
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("select g from GroupEntity g where g.id = :id")

@@ -1,6 +1,15 @@
+server:
+  port: 8084
+
 spring:
   application:
-    name: flipnote
+    name: group
+
+  grpc:
+    server:
+      port: 9094
+    image:
+      address: ${GRPC_IMAGE_URL:localhost:9092}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

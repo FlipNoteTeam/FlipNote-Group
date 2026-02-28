@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
-import flipnote.group.adapter.out.persistence.mapper.JoinMapper;
 import flipnote.group.application.port.out.JoinRepositoryPort;
 import flipnote.group.domain.model.join.JoinDomain;
 import flipnote.group.domain.model.join.JoinStatus;
@@ -24,21 +23,16 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	}
 
 	@Override
-	public JoinDomain save(JoinDomain domain) {
-
-		JoinEntity entity = JoinMapper.createNewEntity(domain);
-
-		joinRepository.save(entity);
-
-		return JoinMapper.toDomain(entity);
+	public void save(JoinEntity join) {
+		joinRepository.save(join);
 	}
 
 	@Override
-	public List<JoinDomain> findFormList(Long groupId) {
+	public List<JoinEntity> findFormList(Long groupId) {
 
 		List<JoinEntity> joinList = joinRepository.findAllByGroupId(groupId);
 
-		return JoinMapper.toDomains(joinList);
+		return joinList;
 	}
 
 	@Override
