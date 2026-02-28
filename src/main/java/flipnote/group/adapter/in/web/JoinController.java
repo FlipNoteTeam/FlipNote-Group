@@ -75,7 +75,7 @@ public class JoinController {
 		
 		FindJoinFormListResponseDto res = FindJoinFormListResponseDto.from(result);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		return ResponseEntity.ok(res);
 	}
 
 	/**
