@@ -8,7 +8,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
-import flipnote.group.infrastructure.persistence.querydsl.GroupRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -56,5 +56,18 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	@Override
 	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId) {
 		return findAllByCursorAndCreatedUserId(cursorId, category, size, userId);
+	}
+
+	@Override
+	public boolean checkJoinable(Long groupId) {
+
+		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupId).orElseThrow(
+			() -> new IllegalArgumentException("not exists")
+		);
+
+		 int maxMember = groupEntity.getMaxMember();
+		 int count = groupEntity.getMemberCount();
+
+		return maxMember > count;
 	}
 }

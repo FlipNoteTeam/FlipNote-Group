@@ -135,4 +135,22 @@ public class GroupEntity extends BaseEntity {
 			throw new IllegalArgumentException("name too long");
 		}
 	}
+
+	public void plusCount() {
+
+		if(this.memberCount+1 > this.maxMember) {
+			throw new IllegalArgumentException("max member");
+		}
+
+		this.memberCount++;
+	}
+
+	public void minusCount() {
+
+		if(this.memberCount-1 < 0) {
+			throw new IllegalArgumentException("not minus member");
+		}
+
+		this.memberCount--;
+	}
 }

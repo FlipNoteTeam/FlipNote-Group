@@ -41,7 +41,8 @@ public class JoinEntity extends BaseEntity {
 	private String form;
 
 	@Builder
-	private JoinEntity(Long userId, Long groupId, JoinStatus status, String form) {
+	private JoinEntity(Long id, Long userId, Long groupId, JoinStatus status, String form) {
+		this.id = id;
 		this.userId = userId;
 		this.groupId = groupId;
 		this.status = status;
@@ -55,5 +56,9 @@ public class JoinEntity extends BaseEntity {
 			.form(form)
 			.status(status)
 			.build();
+	}
+
+	public void updateStatus(JoinStatus status) {
+		this.status = status;
 	}
 }

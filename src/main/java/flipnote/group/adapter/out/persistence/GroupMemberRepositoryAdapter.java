@@ -5,11 +5,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 	private final GroupMemberRepository groupMemberRepository;
+	private final GroupRepository groupRepository;
 
 	/**
 	 * 그룹 멤버 저장
@@ -25,6 +28,13 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	@Override
 	public void save(GroupMemberEntity groupMember) {
 		groupMemberRepository.save(groupMember);
+
+		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
+			() -> new IllegalArgumentException("not exist group")
+		);
+
+		//그룹 엔티티 + 1
+		groupEntity.plusCount();
 	}
 
 	/**

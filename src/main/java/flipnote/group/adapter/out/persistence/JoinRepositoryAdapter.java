@@ -32,4 +32,18 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 
 		return joinList;
 	}
+
+	@Override
+	public JoinEntity findJoin(Long joinId) {
+
+		JoinEntity entity = joinRepository.findById(joinId).orElseThrow(
+			() -> new IllegalArgumentException("not exist")
+		);
+		return entity;
+	}
+
+	@Override
+	public JoinEntity updateJoin(JoinEntity join) {
+		return joinRepository.save(join);
+	}
 }

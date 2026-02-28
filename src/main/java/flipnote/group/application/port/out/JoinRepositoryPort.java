@@ -10,4 +10,8 @@ public interface JoinRepositoryPort {
 	void save(JoinEntity join);
 
 	List<JoinEntity> findFormList(Long groupId);
+
+	JoinEntity findJoin(Long joinId);
+
+	JoinEntity updateJoin(JoinEntity join);
 }
