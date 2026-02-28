@@ -8,7 +8,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
-import flipnote.group.infrastructure.persistence.querydsl.GroupRepository;
+import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -68,8 +68,6 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 		 int maxMember = groupEntity.getMaxMember();
 		 int count = groupEntity.getMemberCount();
 
-		 boolean joinable = maxMember > count;
-
-		return joinable;
+		return maxMember > count;
 	}
 }

@@ -97,7 +97,7 @@ public class JoinController {
 
 		JoinRespondResult result = joinRespondUseCase.joinRespond(cmd);
 
-		JoinRespondResponseDto res = JoinRespondResponseDto.from(result);
+		JoinRespondResponseDto res = JoinRespondResponseDto.of(result);
 
 		return ResponseEntity.ok(res);
 	}

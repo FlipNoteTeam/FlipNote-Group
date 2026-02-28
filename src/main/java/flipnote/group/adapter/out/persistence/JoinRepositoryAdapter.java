@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
 import flipnote.group.application.port.out.JoinRepositoryPort;
-import flipnote.group.domain.model.join.JoinDomain;
-import flipnote.group.domain.model.join.JoinStatus;
 import flipnote.group.infrastructure.persistence.jpa.JoinRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -36,21 +34,16 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	}
 
 	@Override
-	public JoinDomain findJoin(Long joinId) {
+	public JoinEntity findJoin(Long joinId) {
 
 		JoinEntity entity = joinRepository.findById(joinId).orElseThrow(
 			() -> new IllegalArgumentException("not exist")
 		);
-		return JoinMapper.toDomain(entity);
+		return entity;
 	}
 
 	@Override
-	public JoinDomain updateJoin(JoinDomain joinDomain) {
-
-		JoinEntity entity = JoinMapper.toEntity(joinDomain);
-
-		joinRepository.save(entity);
-
-		return JoinMapper.toDomain(entity);
+	public JoinEntity updateJoin(JoinEntity join) {
+		return joinRepository.save(join);
 	}
 }

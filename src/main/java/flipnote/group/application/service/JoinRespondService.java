@@ -3,6 +3,9 @@ package flipnote.group.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import flipnote.group.adapter.out.entity.GroupMemberEntity;
+import flipnote.group.adapter.out.entity.JoinEntity;
+import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.in.JoinRespondUseCase;
 import flipnote.group.application.port.in.command.JoinRespondCommand;
 import flipnote.group.application.port.in.result.JoinRespondResult;
@@ -10,7 +13,6 @@ import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.application.port.out.JoinRepositoryPort;
-import flipnote.group.domain.model.join.JoinDomain;
 import flipnote.group.domain.model.join.JoinStatus;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
@@ -43,30 +45,39 @@ public class JoinRespondService implements JoinRespondUseCase {
 			throw new IllegalArgumentException("not permission");
 		}
 
-		JoinDomain joinDomain = joinRepository.findJoin(cmd.joinId());
+		JoinEntity join = joinRepository.findJoin(cmd.joinId());
 
-		joinDomain.updateStatus(cmd.status());
+		if(join.getStatus().equals(JoinStatus.ACCEPT)) {
+			throw new IllegalArgumentException("already accept");
+		}
+
+		join.updateStatus(cmd.status());
 
 		//거절일 경우
 		if(cmd.status().equals(JoinStatus.REJECT)) {
-			JoinDomain domain = joinRepository.updateJoin(joinDomain);
+			JoinEntity response = joinRepository.updateJoin(join);
 
-			return new JoinRespondResult(domain);
+			return new JoinRespondResult(response);
 		}
 
 		//수락일 경우
 		boolean joinable = groupRepository.checkJoinable(cmd.groupId());
 		
 		//꽉찼을 경우
-		if(joinable) {
+		if(!joinable) {
 			throw new IllegalArgumentException("max member");
 		}
 		
 		//가입 가능한 경우
-		groupMemberRepository.save(cmd.groupId(), cmd.userId(), GroupMemberRole.MEMBER);
+		RoleEntity role = groupRoleRepository.findByIdAndRole(cmd.groupId(), GroupMemberRole.MEMBER);
 
-		JoinDomain domain = joinRepository.updateJoin(joinDomain);
+		//주의: cmd의 유저가 아닌 join의 아이디로 해야함
+		GroupMemberEntity groupMember = GroupMemberEntity.create(cmd.groupId(), join.getUserId(), role);
 
-		return new JoinRespondResult(domain);
+		groupMemberRepository.save(groupMember);
+
+		JoinEntity response = joinRepository.updateJoin(join);
+
+		return new JoinRespondResult(response);
 	}
 }

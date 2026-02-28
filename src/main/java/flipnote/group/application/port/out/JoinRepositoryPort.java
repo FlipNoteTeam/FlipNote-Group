@@ -3,8 +3,6 @@ package flipnote.group.application.port.out;
 import java.util.List;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
-import flipnote.group.domain.model.join.JoinDomain;
-import flipnote.group.domain.model.join.JoinStatus;
 
 public interface JoinRepositoryPort {
 	boolean existsJoin(Long groupId, Long userId);
@@ -13,7 +11,7 @@ public interface JoinRepositoryPort {
 
 	List<JoinEntity> findFormList(Long groupId);
 
-	JoinDomain findJoin(Long joinId);
+	JoinEntity findJoin(Long joinId);
 
-	JoinDomain updateJoin(JoinDomain joinDomain);
+	JoinEntity updateJoin(JoinEntity join);
 }

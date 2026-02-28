@@ -57,4 +57,8 @@ public class JoinEntity extends BaseEntity {
 			.status(status)
 			.build();
 	}
+
+	public void updateStatus(JoinStatus status) {
+		this.status = status;
+	}
 }
