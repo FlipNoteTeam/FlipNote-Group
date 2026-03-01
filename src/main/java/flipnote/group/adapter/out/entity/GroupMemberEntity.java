@@ -2,6 +2,7 @@ package flipnote.group.adapter.out.entity;
 
 import flipnote.group.domain.model.BaseEntity;
 import flipnote.group.domain.model.member.GroupMemberRole;
+import flipnote.group.domain.model.member.MemberInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,6 +66,13 @@ public class GroupMemberEntity extends BaseEntity {
 			.groupId(groupId)
 			.userId(userId)
 			.role(role)
+			.build();
+	}
+
+	public MemberInfo toMemberInfo() {
+		return MemberInfo.builder()
+			.userId(this.getUserId())
+			.role(this.getRole().getRole())
 			.build();
 	}
 }
