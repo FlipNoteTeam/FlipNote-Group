@@ -89,6 +89,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 	@Override
 	public void deleteGroupMember(Long memberId) {
+
+		groupMemberRepository.findById(memberId).orElseThrow(
+			() -> new IllegalArgumentException("not exist member")
+		);
+
 		groupMemberRepository.deleteById(memberId);
 	}
 }

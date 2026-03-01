@@ -1,6 +1,7 @@
 package flipnote.group.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.application.port.in.KickMemberUseCase;
 import flipnote.group.application.port.in.command.KickMemberCommand;
@@ -17,6 +18,7 @@ public class KickMemberService implements KickMemberUseCase {
 	private final GroupRoleRepositoryPort groupRoleRepository;
 
 	@Override
+	@Transactional
 	public void kickMember(KickMemberCommand cmd) {
 		//권한 체크
 		boolean hasPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), GroupPermission.MEMBER_MANAGE);

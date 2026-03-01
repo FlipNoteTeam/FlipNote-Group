@@ -104,7 +104,12 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
-		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
+
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("not exist member")
+		);
+
+		return groupRoleRepository.existsByGroupIdAndRole(groupId, groupMember.getRole().getRole());
 	}
 
 	/**

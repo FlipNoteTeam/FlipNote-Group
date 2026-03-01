@@ -49,7 +49,8 @@ public class GroupMemberEntity extends BaseEntity {
 	private RoleEntity role;
 
 	@Builder
-	private GroupMemberEntity(Long groupId, Long userId, RoleEntity role) {
+	private GroupMemberEntity(Long id, Long groupId, Long userId, RoleEntity role) {
+		this.id = id;
 		this.groupId = groupId;
 		this.userId = userId;
 		this.role = role;
@@ -71,6 +72,7 @@ public class GroupMemberEntity extends BaseEntity {
 
 	public MemberInfo toMemberInfo() {
 		return MemberInfo.builder()
+			.memberId(this.getId())
 			.userId(this.getUserId())
 			.role(this.getRole().getRole())
 			.build();

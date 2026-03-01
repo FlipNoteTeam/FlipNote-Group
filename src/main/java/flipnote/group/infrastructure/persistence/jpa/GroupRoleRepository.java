@@ -10,4 +10,6 @@ import flipnote.group.domain.model.member.GroupMemberRole;
 
 public interface GroupRoleRepository extends JpaRepository<RoleEntity, Long> {
 	Optional<RoleEntity> findByGroupIdAndRole(Long groupId, GroupMemberRole groupMemberRole);
+
+	boolean existsByGroupIdAndRole(Long groupId, GroupMemberRole role);
 }
