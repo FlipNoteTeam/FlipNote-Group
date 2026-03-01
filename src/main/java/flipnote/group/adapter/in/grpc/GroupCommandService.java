@@ -29,7 +29,5 @@ public class GroupCommandService extends GroupCommandServiceGrpc.GroupCommandSer
 		} catch (Exception e) {
 			responseObserver.onError(e);
 		}
-
-		super.getGroupName(request, responseObserver);
 	}
 }
