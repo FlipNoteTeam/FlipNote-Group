@@ -1,13 +1,13 @@
 package flipnote.group.api.dto.response;
 
-import flipnote.group.domain.model.join.JoinDomain;
+import flipnote.group.application.port.in.result.ApplicationFormResult;
 import flipnote.group.domain.model.join.JoinStatus;
 
 public record ApplicationFormResponseDto(
 	Long groupJoinId,
 	JoinStatus status
 ) {
-	public static ApplicationFormResponseDto from(JoinDomain domain) {
-		return new ApplicationFormResponseDto(domain.getId(), domain.getStatus());
+	public static ApplicationFormResponseDto from(ApplicationFormResult result) {
+		return new ApplicationFormResponseDto(result.join().getId(), result.join().getStatus());
 	}
 }

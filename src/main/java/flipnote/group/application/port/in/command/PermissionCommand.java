@@ -6,7 +6,6 @@ import flipnote.group.domain.model.permission.GroupPermission;
 public record PermissionCommand(
 	Long userId,
 	Long groupId,
-	GroupMemberRole hostRole,
 	GroupMemberRole changeRole,
 	GroupPermission permission) {
 
