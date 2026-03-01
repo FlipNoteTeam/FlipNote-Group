@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import flipnote.group.api.dto.response.FindGroupMemberResponseDto;
 import flipnote.group.application.port.in.FindGroupMemberUseCase;
+import flipnote.group.application.port.in.KickMemberUseCase;
 import flipnote.group.application.port.in.command.FindGroupMemberCommand;
+import flipnote.group.application.port.in.command.KickMemberCommand;
 import flipnote.group.application.port.in.result.FindGroupMemberResult;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/groups/{groupId}")
+@RequestMapping("/v1/groups/{groupId}/members")
 public class MemberController {
 
 	private final FindGroupMemberUseCase findGroupMemberUseCase;
+	private final KickMemberUseCase kickMemberUseCase;
 
 	/**
 	 * 그룹 내 멤버 전체 조회
@@ -29,7 +32,7 @@ public class MemberController {
 	 * @param groupId
 	 * @return
 	 */
-	@GetMapping("/members")
+	@GetMapping("")
 	public ResponseEntity<FindGroupMemberResponseDto> findGroupMembers(
 		@RequestHeader("X-USER-ID") Long userId,
 		@PathVariable("groupId") Long groupId) {
@@ -43,4 +46,23 @@ public class MemberController {
 		return ResponseEntity.ok(res);
 	}
 
+	/**
+	 * 그룹 멤버 추방
+	 * @param userId
+	 * @param groupId
+	 * @param memberId
+	 * @return
+	 */
+	@DeleteMapping("/{memberId}")
+	public ResponseEntity<Void> kickGroupMember(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId,
+		@PathVariable("memberId") Long memberId
+	) {
+		KickMemberCommand cmd = new KickMemberCommand(userId, groupId, memberId);
+
+		kickMemberUseCase.kickMember(cmd);
+
+		return ResponseEntity.noContent().build();
+	}
 }

@@ -94,8 +94,4 @@ public class PermissionController {
 
 		return ResponseEntity.ok(res);
 	}
-
-	//todo 그룹 멤버 추방
-
-	//todo 가입 신청 허가
 }

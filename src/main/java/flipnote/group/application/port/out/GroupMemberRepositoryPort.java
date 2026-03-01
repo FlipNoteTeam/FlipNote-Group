@@ -15,4 +15,8 @@ public interface GroupMemberRepositoryPort {
     GroupMemberEntity findMyRole(Long groupId, Long userId);
 
     boolean checkOwner(Long groupId, Long userId);
+
+    void deleteGroupMember(Long memberId);
+
+    boolean checkMember(Long aLong);
 }

@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberInfo {
+	private Long memberId;
 	private Long userId;
 	private GroupMemberRole role;
 
 	@Builder
-	private MemberInfo(Long userId, GroupMemberRole role) {
+	private MemberInfo(Long memberId, Long userId, GroupMemberRole role) {
+		this.memberId = memberId;
 		this.userId = userId;
 		this.role = role;
 	}

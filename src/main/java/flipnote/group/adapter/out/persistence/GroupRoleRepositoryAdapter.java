@@ -30,15 +30,15 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	private static final Map<GroupMemberRole, List<GroupPermission>> DEFAULT_PERMS_BY_ROLE =
 		Map.of(
 			GroupMemberRole.OWNER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.HEAD_MANAGER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.MANAGER, List.of(
-				GroupPermission.KICK,
+				GroupPermission.MEMBER_MANAGE,
 				GroupPermission.JOIN_REQUEST_MANAGE
 			),
 			GroupMemberRole.MEMBER, List.of()
@@ -104,7 +104,12 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
-		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
+
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("not exist member")
+		);
+
+		return groupRoleRepository.existsByGroupIdAndRole(groupId, groupMember.getRole().getRole());
 	}
 
 	/**
