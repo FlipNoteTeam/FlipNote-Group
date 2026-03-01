@@ -46,4 +46,11 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	public JoinEntity updateJoin(JoinEntity join) {
 		return joinRepository.save(join);
 	}
+
+	@Override
+	public List<JoinEntity> findMyJoinList(Long userId) {
+		List<JoinEntity> joinList = joinRepository.findAllByUserId(userId);
+
+		return joinList;
+	}
 }

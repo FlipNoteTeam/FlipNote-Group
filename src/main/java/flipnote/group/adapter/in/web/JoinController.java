@@ -102,5 +102,4 @@ public class JoinController {
 		return ResponseEntity.ok(res);
 	}
 
-	//todo 내가 신청한 가입신청 리스트 조회
 }
