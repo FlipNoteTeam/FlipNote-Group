@@ -21,9 +21,4 @@ public enum GroupMemberRole {
 	public boolean isHigherThan(GroupMemberRole other) {
 		return this.priority > other.priority;
 	}
-
-	//권한 이상
-	public boolean isAtLeast(GroupMemberRole other) {
-		return this.priority >= other.priority;
-	}
 }
