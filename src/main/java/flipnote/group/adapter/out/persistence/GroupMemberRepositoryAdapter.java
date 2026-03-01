@@ -1,6 +1,7 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -90,10 +91,23 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	@Override
 	public void deleteGroupMember(Long memberId) {
 
-		groupMemberRepository.findById(memberId).orElseThrow(
+		GroupMemberEntity groupMember = groupMemberRepository.findById(memberId).orElseThrow(
 			() -> new IllegalArgumentException("not exist member")
 		);
 
 		groupMemberRepository.deleteById(memberId);
+
+		//그룹 인원수 동기화
+		GroupEntity group = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
+			() -> new IllegalArgumentException("not exist group")
+		);
+
+		group.minusCount();
+
+	}
+
+	@Override
+	public boolean checkMember(Long memberId) {
+		return groupMemberRepository.existsById(memberId);
 	}
 }

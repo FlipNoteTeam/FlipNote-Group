@@ -17,4 +17,6 @@ public interface GroupMemberRepositoryPort {
     boolean checkOwner(Long groupId, Long userId);
 
     void deleteGroupMember(Long memberId);
+
+    boolean checkMember(Long aLong);
 }

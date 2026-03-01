@@ -26,6 +26,13 @@ public class KickMemberService implements KickMemberUseCase {
 			throw new IllegalArgumentException("not exist permission");
 		}
 
+		boolean isExist = groupMemberRepository.checkMember(cmd.memberId());
+
+		if(!isExist) {
+			throw new IllegalArgumentException("not exist member");
+		}
+
 		groupMemberRepository.deleteGroupMember(cmd.memberId());
+
 	}
 }
