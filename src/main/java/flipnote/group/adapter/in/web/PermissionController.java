@@ -38,17 +38,10 @@ public class PermissionController {
 		AddPermissionResult result = addPermissionUseCase.addPermission(cmd);
 
 		AddPermissionResponseDto res = AddPermissionResponseDto.from(result);
-		
+
+		return ResponseEntity.ok(res);
 	}
 
-	// //todo 하위 권한 삭제 -> 유저 아이디, 하위 그거, 하위 권한
-	// @DeleteMapping("/permissions")
-	// public ResponseEntity<?> changeDownPermission(
-	// 	@RequestHeader("X-USER-ID") Long userId,
-	// 	@PathVariable("groupId") Long groupId,
-	// 	@Valid @RequestBody DeletePermissionRequestDto req) {
-	//
-	// }
 
 	//todo 그룹 멤버 추방
 
