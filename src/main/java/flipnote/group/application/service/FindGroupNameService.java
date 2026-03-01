@@ -1,5 +1,7 @@
 package flipnote.group.application.service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
@@ -22,6 +24,10 @@ public class FindGroupNameService implements FindGroupNameUseCase {
 	public String findGroupName(Long groupId) {
 
 		GroupEntity group = groupRepository.findById(groupId);
+
+		if (group == null) {
+			throw new NoSuchElementException("Group not found: " + groupId);
+		}
 
 		return group.getName();
 	}
