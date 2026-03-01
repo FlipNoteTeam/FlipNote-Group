@@ -38,7 +38,7 @@ public class PermissionController {
 		@PathVariable("groupId") Long groupId,
 		@Valid @RequestBody AddPermissionRequestDto req) {
 
-		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
+		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.changeRole(), req.permission());
 
 		AddPermissionResult result = addPermissionUseCase.addPermission(cmd);
 
@@ -60,7 +60,7 @@ public class PermissionController {
 		@PathVariable("groupId") Long groupId,
 		@Valid @RequestBody RemovePermissionRequestDto req) {
 
-		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
+		PermissionCommand cmd = new PermissionCommand(userId, groupId, req.changeRole(), req.permission());
 
 		RemovePermissionResult result = removePermissionUseCase.removePermission(cmd);
 

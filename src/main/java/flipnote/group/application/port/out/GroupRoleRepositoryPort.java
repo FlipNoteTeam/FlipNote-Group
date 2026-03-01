@@ -18,4 +18,8 @@ public interface GroupRoleRepositoryPort {
 	boolean existPermission(GroupMemberRole groupMemberRole, Long aLong, GroupPermission permission);
 
 	List<GroupPermission> removePermission(Long groupId, GroupMemberRole role, GroupPermission permission);
+
+	RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole);
+
+	GroupMemberRole findRole(Long userId, Long groupId);
 }

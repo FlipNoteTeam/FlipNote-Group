@@ -48,4 +48,17 @@ public class JoinEntity extends BaseEntity {
 		this.status = status;
 		this.form = form;
 	}
+
+	public static JoinEntity create(Long groupId, Long userId, String form, JoinStatus status) {
+		return JoinEntity.builder()
+			.groupId(groupId)
+			.userId(userId)
+			.form(form)
+			.status(status)
+			.build();
+	}
+
+	public void updateStatus(JoinStatus status) {
+		this.status = status;
+	}
 }

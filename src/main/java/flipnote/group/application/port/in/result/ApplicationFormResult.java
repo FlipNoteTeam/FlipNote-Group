@@ -1,7 +1,10 @@
 package flipnote.group.application.port.in.result;
 
-import flipnote.group.domain.model.join.JoinDomain;
+import flipnote.group.adapter.out.entity.JoinEntity;
 
 public record ApplicationFormResult(
-	JoinDomain join) {
+	JoinEntity join) {
+	public static ApplicationFormResult of(JoinEntity join) {
+		return new ApplicationFormResult(join);
+	}
 }
