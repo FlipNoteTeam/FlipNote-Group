@@ -9,4 +9,7 @@ public record MyPermissionResult(
 	GroupMemberRole role,
 	List<GroupPermission> permissions
 ) {
+	public static MyPermissionResult of(GroupMemberRole role, List<GroupPermission> permissions) {
+		return new MyPermissionResult(role, permissions);
+	}
 }

@@ -3,7 +3,6 @@ package flipnote.group.application.port.out;
 import java.util.List;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
-import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.MemberInfo;
 
 public interface GroupMemberRepositoryPort {
@@ -13,7 +12,7 @@ public interface GroupMemberRepositoryPort {
 
     List<MemberInfo> findMemberInfo(Long groupId);
 
-    GroupMember findMyRole(Long groupId, Long userId);
+    GroupMemberEntity findMyRole(Long groupId, Long userId);
 
     boolean checkOwner(Long groupId, Long userId);
 }

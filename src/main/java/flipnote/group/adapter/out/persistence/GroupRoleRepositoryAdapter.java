@@ -12,7 +12,6 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.PermissionEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
-import flipnote.group.domain.model.member.GroupMember;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
@@ -194,7 +193,9 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public List<GroupPermission> findMyRolePermission(Long groupId, GroupMemberRole role) {
 
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exists member")
+		);
 
 		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(
 			roleEntity.getId());
