@@ -12,5 +12,7 @@ public interface GroupMemberRepositoryPort {
 
     List<MemberInfo> findMemberInfo(Long groupId);
 
+    GroupMemberEntity findMyRole(Long groupId, Long userId);
+
     boolean checkOwner(Long groupId, Long userId);
 }

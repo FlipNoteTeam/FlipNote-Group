@@ -76,4 +76,14 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 
 		return groupMember.getRole().equals(GroupMemberRole.OWNER);
 	}
+
+	@Override
+	public GroupMemberEntity findMyRole(Long groupId, Long userId) {
+
+		GroupMemberEntity entity = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("entity not exist")
+		);
+
+		return entity;
+	}
 }

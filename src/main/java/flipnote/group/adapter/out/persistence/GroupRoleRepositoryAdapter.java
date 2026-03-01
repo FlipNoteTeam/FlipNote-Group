@@ -188,4 +188,20 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 			.map(PermissionEntity::getPermission)
 			.toList();
 	}
+
+
+	@Override
+	public List<GroupPermission> findMyRolePermission(Long groupId, GroupMemberRole role) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exists member")
+		);
+
+		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(
+			roleEntity.getId());
+
+		return permissions.stream()
+			.map(PermissionEntity::getPermission)
+			.toList();
+	}
 }
