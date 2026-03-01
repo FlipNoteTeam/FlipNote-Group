@@ -48,9 +48,9 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	}
 
 	@Override
-	public List<JoinDomain> findMyJoinList(Long userId) {
+	public List<JoinEntity> findMyJoinList(Long userId) {
 		List<JoinEntity> joinList = joinRepository.findAllByUserId(userId);
 
-		return JoinMapper.toDomains(joinList);
+		return joinList;
 	}
 }

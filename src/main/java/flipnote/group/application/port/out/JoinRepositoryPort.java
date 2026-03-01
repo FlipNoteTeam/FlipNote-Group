@@ -15,5 +15,5 @@ public interface JoinRepositoryPort {
 
 	JoinEntity updateJoin(JoinEntity join);
 
-	List<JoinDomain> findMyJoinList(Long userId);
+	List<JoinEntity> findMyJoinList(Long userId);
 }
