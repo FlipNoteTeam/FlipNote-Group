@@ -3,6 +3,7 @@ package flipnote.group.application.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.application.port.in.FindGroupMemberUseCase;
 import flipnote.group.application.port.in.command.FindGroupMemberCommand;
@@ -23,6 +24,7 @@ public class FindGroupMemberService implements FindGroupMemberUseCase {
 	 * @return
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public FindGroupMemberResult findGroupMember(FindGroupMemberCommand cmd) {
 
 		groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());

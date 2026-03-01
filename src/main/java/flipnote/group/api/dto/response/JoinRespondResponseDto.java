@@ -7,10 +7,10 @@ public record JoinRespondResponseDto(
 	Long joinId,
 	JoinStatus status
 ) {
-	public static JoinRespondResponseDto from(JoinRespondResult result) {
+	public static JoinRespondResponseDto of(JoinRespondResult result) {
 
-		Long joinId = result.joinDomain().getId();
-		JoinStatus status = result.joinDomain().getStatus();
+		Long joinId = result.join().getId();
+		JoinStatus status = result.join().getStatus();
 
 		return new JoinRespondResponseDto(joinId, status);
 	}
