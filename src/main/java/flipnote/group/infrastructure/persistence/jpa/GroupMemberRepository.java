@@ -11,8 +11,6 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 public interface GroupMemberRepository
 	extends JpaRepository<GroupMemberEntity, Long> {
 
-	boolean existsByUserIdAndRole_Id(Long userId, Long roleId);
-
 	boolean existsByGroupIdAndUserId(Long groupId, Long userId);
 
 	@Query("""
@@ -24,4 +22,6 @@ public interface GroupMemberRepository
 	List<GroupMemberEntity> findAllByGroupId(Long groupId);
 
 	Optional<GroupMemberEntity> findByGroupIdAndUserId(Long groupId, Long userId);
+
+	boolean existsByUserIdAndRole_Id(Long userId, Long id);
 }

@@ -3,10 +3,12 @@ package flipnote.group.adapter.out.persistence;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.PermissionEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
@@ -87,13 +89,14 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole);
-
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
 		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
 
 	/**
-	 * 권한 체킁
+	 * 권한 체크
 	 * @param userId
 	 * @param groupId
 	 * @param permission
@@ -104,8 +107,63 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 		return groupRolePermissionRepository.existsUserInGroupPermission(groupId, userId, permission);
 	}
 
+	/**
+	 * 권한 추가
+	 * @param groupId
+	 * @param role
+	 * @param permission
+	 */
+	@Override
+	public List<GroupPermission> addPermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
+
+		PermissionEntity permissionEntity = PermissionEntity.builder()
+			.groupRoleId(roleEntity.getId())
+			.permission(permission)
+			.build();
+
+		groupRolePermissionRepository.save(permissionEntity);
+
+		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(roleEntity.getId());
+
+		return permissions.stream()
+			.map(PermissionEntity::getPermission)
+			.toList();
+	}
+
+	/**
+	 * 역할에 권한 체크
+	 * @param role
+	 * @param groupId
+	 * @param permission
+	 * @return
+	 */
+	@Override
+	public boolean existPermission(GroupMemberRole role, Long groupId, GroupPermission permission) {
+
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
+
+		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
+	}
+
 	@Override
 	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
-		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole);
+		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
+	}
+
+	@Override
+	public GroupMemberRole findRole(Long userId, Long groupId) {
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("not exists member")
+		);
+
+		return groupMember.getRole().getRole();
 	}
 }
