@@ -89,7 +89,9 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	 */
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole);
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
 		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
 
@@ -114,7 +116,9 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public List<GroupPermission> addPermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
 
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
 
 		PermissionEntity permissionEntity = PermissionEntity.builder()
 			.groupRoleId(roleEntity.getId())
@@ -140,19 +144,22 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public boolean existPermission(GroupMemberRole role, Long groupId, GroupPermission permission) {
 
-		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
+		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
 
 		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
 	}
 
 	@Override
 	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
-		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole);
+		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole).orElseThrow(
+			() -> new IllegalArgumentException("not exist role")
+		);
 	}
 
 	@Override
 	public GroupMemberRole findRole(Long userId, Long groupId) {
-
 		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
 			() -> new IllegalArgumentException("not exists member")
 		);
