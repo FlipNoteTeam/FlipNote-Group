@@ -13,7 +13,7 @@ public class GrpcClientConfig {
 
     @Bean(destroyMethod = "shutdownNow")
     public ManagedChannel imageCommandChannel(
-        @Value("${grpc.image.address:localhost:9092}") String target
+        @Value("${spring.grpc.image.address:localhost:9092}") String target
     ) {
         return ManagedChannelBuilder.forTarget(target)
             .usePlaintext()

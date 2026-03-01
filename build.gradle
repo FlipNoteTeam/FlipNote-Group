@@ -51,7 +51,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 	compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -92,7 +92,7 @@ protobuf {
 		}
 	}
 	generateProtoTasks {
-		all().configureEach { task ->
+		all().each { task ->
 			task.plugins {
 				grpc {}
 			}
@@ -104,7 +104,6 @@ def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
 sourceSets {
 	main {
-		proto { srcDir "src/main/proto" }
 		java {
 			srcDirs querydslDir,
 					"$buildDir/generated/sources/proto/main/java",
