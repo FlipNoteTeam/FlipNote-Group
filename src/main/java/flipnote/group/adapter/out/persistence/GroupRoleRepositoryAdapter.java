@@ -93,7 +93,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	}
 
 	/**
-	 * 권한 체킁
+	 * 권한 체크
 	 * @param userId
 	 * @param groupId
 	 * @param permission
@@ -142,5 +142,10 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role);
 
 		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
+	}
+
+	@Override
+	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
+		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole);
 	}
 }

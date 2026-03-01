@@ -52,13 +52,14 @@ public class JoinController {
 
 		ApplicationFormResult result = joinUseCase.joinRequest(cmd);
 
-		ApplicationFormResponseDto res = ApplicationFormResponseDto.from(result.join());
+		ApplicationFormResponseDto res = ApplicationFormResponseDto.from(result);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(res);
 	}
 
 	/**
-	 * 그룹 가입 신청 리스트 조회
+	 * 해당 그룹 가입 신청 리스트 조회
+	 * todo 유저 닉네임 추가
 	 * @param userId
 	 * @param groupId
 	 * @return
@@ -74,7 +75,7 @@ public class JoinController {
 		
 		FindJoinFormListResponseDto res = FindJoinFormListResponseDto.from(result);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		return ResponseEntity.ok(res);
 	}
 
 	/**
@@ -92,11 +93,11 @@ public class JoinController {
 		@PathVariable("joinId") Long joinId,
 		@Valid @RequestBody JoinRespondRequestDto req) {
 
-		JoinRespondCommand cmd = new JoinRespondCommand(groupId, userId, joinId, req.status());
+		JoinRespondCommand cmd = new JoinRespondCommand(groupId, userId, joinId, req.joinStatus());
 
 		JoinRespondResult result = joinRespondUseCase.joinRespond(cmd);
 
-		JoinRespondResponseDto res = JoinRespondResponseDto.from(result);
+		JoinRespondResponseDto res = JoinRespondResponseDto.of(result);
 
 		return ResponseEntity.ok(res);
 	}
