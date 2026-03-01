@@ -33,7 +33,7 @@ public class PermissionController {
 		@PathVariable("groupId") Long groupId,
 		@Valid @RequestBody AddPermissionRequestDto req) {
 
-		AddPermissionCommand cmd = new AddPermissionCommand(userId, groupId, req.hostRole(), req.changeRole(), req.permission());
+		AddPermissionCommand cmd = new AddPermissionCommand(userId, groupId, req.changeRole(), req.permission());
 
 		AddPermissionResult result = addPermissionUseCase.addPermission(cmd);
 

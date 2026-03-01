@@ -3,10 +3,12 @@ package flipnote.group.adapter.out.persistence;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.PermissionEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
@@ -88,7 +90,6 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole);
-
 		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
 
@@ -147,5 +148,15 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
 		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole);
+	}
+
+	@Override
+	public GroupMemberRole findRole(Long userId, Long groupId) {
+
+		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
+			() -> new IllegalArgumentException("not exists member")
+		);
+
+		return groupMember.getRole().getRole();
 	}
 }
