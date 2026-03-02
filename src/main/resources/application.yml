@@ -39,6 +39,14 @@ cloud:
     stack:
       auto: false
 
+springdoc:
+  swagger-ui:
+    path: /groups/swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /groups/v3/api-docs
+
 
 image-clean:
   batch-size: 300
