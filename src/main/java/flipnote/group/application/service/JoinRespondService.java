@@ -16,6 +16,8 @@ import flipnote.group.application.port.out.JoinRepositoryPort;
 import flipnote.group.domain.model.join.JoinStatus;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,13 +44,13 @@ public class JoinRespondService implements JoinRespondUseCase {
 		boolean existPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), MANAGE);
 		
 		if(!existPermission) {
-			throw new IllegalArgumentException("not permission");
+			throw new BusinessException(ErrorCode.PERMISSION_NOT_FOUND);
 		}
 
 		JoinEntity join = joinRepository.findJoin(cmd.joinId());
 
 		if(join.getStatus().equals(JoinStatus.ACCEPT)) {
-			throw new IllegalArgumentException("already accept");
+			throw new BusinessException(ErrorCode.JOIN_ALREADY_ACCEPTED);
 		}
 
 		join.updateStatus(cmd.status());
@@ -65,7 +67,7 @@ public class JoinRespondService implements JoinRespondUseCase {
 		
 		//꽉찼을 경우
 		if(!joinable) {
-			throw new IllegalArgumentException("max member");
+			throw new BusinessException(ErrorCode.GROUP_MEMBER_LIMIT_EXCEEDED);
 		}
 		
 		//가입 가능한 경우

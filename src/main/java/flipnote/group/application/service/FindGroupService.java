@@ -14,6 +14,8 @@ import flipnote.group.application.port.in.command.FindGroupCommand;
 import flipnote.group.application.port.in.result.FindGroupResult;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
 import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
@@ -56,9 +58,10 @@ public class FindGroupService implements FindGroupUseCase {
 			imageUrl = response.getImageUrl();
 		} catch (StatusRuntimeException e) {
 			switch (e.getStatus().getCode()) {
-				case NOT_FOUND -> throw new IllegalArgumentException("이미지를 찾을 수 없습니다.");
-				case INTERNAL -> throw new IllegalArgumentException("이미지 서버 내부 오류입니다.");
-				default -> throw new IllegalArgumentException("이미지 서비스 오류: " + e.getStatus().getDescription());
+				case NOT_FOUND -> throw new BusinessException(ErrorCode.IMAGE_NOT_FOUND);
+				case INVALID_ARGUMENT -> throw new BusinessException(ErrorCode.IMAGE_INVALID_REQUEST);
+				case INTERNAL -> throw new BusinessException(ErrorCode.IMAGE_SERVER_ERROR);
+				default -> throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
 			}
 		}
 

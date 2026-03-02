@@ -6,6 +6,8 @@ import flipnote.group.domain.model.BaseEntity;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -110,36 +112,35 @@ public class GroupEntity extends BaseEntity {
 	 */
 	private static void validate(CreateGroupCommand cmd) {
 		if (cmd == null) {
-			throw new IllegalArgumentException("command required");
+			throw new BusinessException(ErrorCode.INVALID_INPUT);
 		}
-
 		if (cmd.name() == null || cmd.name().isBlank()) {
-			throw new IllegalArgumentException("name required");
-		}
-		if (cmd.maxMember() < 1 || cmd.maxMember() > 100) {
-			throw new IllegalArgumentException("maxMember invalid");
-		}
-		if (cmd.category() == null) {
-			throw new IllegalArgumentException("category required");
-		}
-		if (cmd.joinPolicy() == null) {
-			throw new IllegalArgumentException("join required");
-		}
-		if (cmd.visibility() == null) {
-			throw new IllegalArgumentException("visibility required");
-		}
-		if (cmd.description() == null || cmd.description().isBlank()) {
-			throw new IllegalArgumentException("description required");
+			throw new BusinessException(ErrorCode.GROUP_INVALID_NAME);
 		}
 		if (cmd.name().length() > 50) {
-			throw new IllegalArgumentException("name too long");
+			throw new BusinessException(ErrorCode.GROUP_NAME_TOO_LONG);
+		}
+		if (cmd.maxMember() < 1 || cmd.maxMember() > 100) {
+			throw new BusinessException(ErrorCode.GROUP_INVALID_MAX_MEMBER);
+		}
+		if (cmd.category() == null) {
+			throw new BusinessException(ErrorCode.GROUP_INVALID_CATEGORY);
+		}
+		if (cmd.joinPolicy() == null) {
+			throw new BusinessException(ErrorCode.GROUP_INVALID_JOIN_POLICY);
+		}
+		if (cmd.visibility() == null) {
+			throw new BusinessException(ErrorCode.GROUP_INVALID_VISIBILITY);
+		}
+		if (cmd.description() == null || cmd.description().isBlank()) {
+			throw new BusinessException(ErrorCode.GROUP_INVALID_DESCRIPTION);
 		}
 	}
 
 	public void plusCount() {
 
 		if(this.memberCount+1 > this.maxMember) {
-			throw new IllegalArgumentException("max member");
+			throw new BusinessException(ErrorCode.GROUP_MEMBER_LIMIT_EXCEEDED);
 		}
 
 		this.memberCount++;
@@ -148,7 +149,7 @@ public class GroupEntity extends BaseEntity {
 	public void minusCount() {
 
 		if(this.memberCount-1 < 0) {
-			throw new IllegalArgumentException("not minus member");
+			throw new BusinessException(ErrorCode.MEMBER_COUNT_UNDERFLOW);
 		}
 
 		this.memberCount--;

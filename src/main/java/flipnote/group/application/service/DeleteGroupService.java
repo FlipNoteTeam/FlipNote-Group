@@ -8,6 +8,8 @@ import flipnote.group.application.port.in.command.DeleteGroupCommand;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,7 +28,7 @@ public class DeleteGroupService implements DeleteGroupUseCase {
 
 		//오너가 아닐 경우 에러 발생
 		if(!isOwner) {
-			throw new IllegalArgumentException("not owner");
+			throw new BusinessException(ErrorCode.NOT_OWNER);
 		}
 
 		groupRepository.delete(cmd.groupId());

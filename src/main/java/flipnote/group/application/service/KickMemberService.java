@@ -8,6 +8,8 @@ import flipnote.group.application.port.in.command.KickMemberCommand;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,13 +25,13 @@ public class KickMemberService implements KickMemberUseCase {
 		//권한 체크
 		boolean hasPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), GroupPermission.MEMBER_MANAGE);
 		if(!hasPermission) {
-			throw new IllegalArgumentException("not exist permission");
+			throw new BusinessException(ErrorCode.PERMISSION_DENIED);
 		}
 
 		boolean isExist = groupMemberRepository.checkMember(cmd.memberId());
 
 		if(!isExist) {
-			throw new IllegalArgumentException("not exist member");
+			throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
 		}
 
 		groupMemberRepository.deleteGroupMember(cmd.memberId());

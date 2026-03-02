@@ -11,6 +11,8 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		groupMemberRepository.save(groupMember);
 
 		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
-			() -> new IllegalArgumentException("not exist group")
+			() -> new BusinessException(ErrorCode.GROUP_NOT_FOUND)
 		);
 
 		//그룹 엔티티 + 1
@@ -49,7 +51,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		boolean isMember = groupMemberRepository.existsByGroupIdAndUserId(groupId, userId);
 
 		if(!isMember) {
-			throw new IllegalArgumentException("user not in Group");
+			throw new BusinessException(ErrorCode.USER_NOT_IN_GROUP);
 		}
 	}
 
@@ -72,7 +74,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public boolean checkOwner(Long groupId, Long userId) {
 
 		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
-			() -> new IllegalArgumentException("member not in group")
+			() -> new BusinessException(ErrorCode.USER_NOT_IN_GROUP)
 		);
 
 		return groupMember.getRole().equals(GroupMemberRole.OWNER);
@@ -82,7 +84,7 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public GroupMemberEntity findMyRole(Long groupId, Long userId) {
 
 		GroupMemberEntity entity = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
-			() -> new IllegalArgumentException("entity not exist")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		return entity;
@@ -92,14 +94,14 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public void deleteGroupMember(Long memberId) {
 
 		GroupMemberEntity groupMember = groupMemberRepository.findById(memberId).orElseThrow(
-			() -> new IllegalArgumentException("not exist member")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		groupMemberRepository.deleteById(memberId);
 
 		//그룹 인원수 동기화
 		GroupEntity group = groupRepository.findByIdForUpdate(groupMember.getGroupId()).orElseThrow(
-			() -> new IllegalArgumentException("not exist group")
+			() -> new BusinessException(ErrorCode.GROUP_NOT_FOUND)
 		);
 
 		group.minusCount();
