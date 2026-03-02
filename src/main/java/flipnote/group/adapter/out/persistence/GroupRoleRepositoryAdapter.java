@@ -14,6 +14,8 @@ import flipnote.group.adapter.out.entity.RoleEntity;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRolePermissionRepository;
 import flipnote.group.infrastructure.persistence.jpa.GroupRoleRepository;
@@ -90,7 +92,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public boolean checkRole(Long userId, Long groupId, GroupMemberRole groupMemberRole) {
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
-			() -> new IllegalArgumentException("not exist role")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 		return groupMemberRepository.existsByUserIdAndRole_Id(userId, roleEntity.getId());
 	}
@@ -106,7 +108,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public boolean checkPermission(Long userId, Long groupId, GroupPermission permission) {
 
 		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
-			() -> new IllegalArgumentException("not exist member")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		return groupRoleRepository.existsByGroupIdAndRole(groupId, groupMember.getRole().getRole());
@@ -122,7 +124,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public List<GroupPermission> addPermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
 
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
-			() -> new IllegalArgumentException("not exist role")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		PermissionEntity permissionEntity = PermissionEntity.builder()
@@ -150,7 +152,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public boolean existPermission(GroupMemberRole role, Long groupId, GroupPermission permission) {
 
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
-			() -> new IllegalArgumentException("not exist role")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		return groupRolePermissionRepository.existsByGroupRoleIdAndPermission(roleEntity.getId(), permission);
@@ -159,14 +161,14 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
 		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole).orElseThrow(
-			() -> new IllegalArgumentException("not exist role")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 	}
 
 	@Override
 	public GroupMemberRole findRole(Long userId, Long groupId) {
 		GroupMemberEntity groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userId).orElseThrow(
-			() -> new IllegalArgumentException("not exists member")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		return groupMember.getRole().getRole();
@@ -182,7 +184,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	@Override
 	public List<GroupPermission> removePermission(Long groupId, GroupMemberRole role, GroupPermission permission) {
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
-			() -> new IllegalArgumentException("not exists member")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		groupRolePermissionRepository.deleteByGroupRoleIdAndPermission(roleEntity.getId(), permission);
@@ -199,7 +201,7 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	public List<GroupPermission> findMyRolePermission(Long groupId, GroupMemberRole role) {
 
 		RoleEntity roleEntity = groupRoleRepository.findByGroupIdAndRole(groupId, role).orElseThrow(
-			() -> new IllegalArgumentException("not exists member")
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 
 		List<PermissionEntity> permissions = groupRolePermissionRepository.findAllByGroupRoleId(

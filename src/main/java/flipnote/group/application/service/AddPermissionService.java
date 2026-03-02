@@ -11,6 +11,8 @@ import flipnote.group.application.port.in.result.AddPermissionResult;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,18 +36,18 @@ public class AddPermissionService implements AddPermissionUseCase {
 		boolean existHostPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), cmd.permission());
 
 		if(!existHostPermission) {
-			throw new IllegalArgumentException("host not exist permission");
+			throw new BusinessException(ErrorCode.PERMISSION_DENIED);
 		}
 
 		//권한이 낮을 경우
 		if(!role.isHigherThan(cmd.changeRole())) {
-			throw new IllegalArgumentException("host lower than changeRole");
+			throw new BusinessException(ErrorCode.PERMISSION_DENIED);
 		}
 
 		boolean existPermission = groupRoleRepository.existPermission(cmd.changeRole(), cmd.groupId(), cmd.permission());
 
 		if(existPermission) {
-			throw new IllegalArgumentException("already exist permission");
+			throw new BusinessException(ErrorCode.PERMISSION_ALREADY_EXISTS);
 		}
 
 		List<GroupPermission> groupPermissions = groupRoleRepository.addPermission(cmd.groupId(), cmd.changeRole(),

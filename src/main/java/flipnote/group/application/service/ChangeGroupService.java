@@ -9,6 +9,8 @@ import flipnote.group.application.port.in.ChangeGroupUseCase;
 import flipnote.group.application.port.in.command.ChangeGroupCommand;
 import flipnote.group.application.port.in.result.ChangeGroupResult;
 import flipnote.group.domain.model.member.GroupMemberRole;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
 import flipnote.image.grpc.v1.GetUrlByReferenceResponse;
@@ -34,14 +36,14 @@ public class ChangeGroupService implements ChangeGroupUseCase {
 	public ChangeGroupResult change(ChangeGroupCommand cmd) {
 
 		GroupEntity entity = jpaGroupRepository.findById(cmd.groupId()).orElseThrow(
-			() -> new IllegalArgumentException("group not Exists")
+			() -> new BusinessException(ErrorCode.GROUP_NOT_FOUND)
 		);
 
 		//오너 인지 확인
 		boolean isOwner = groupRoleRepository.checkRole(cmd.userId(), entity.getId(), GroupMemberRole.OWNER);
 
 		if(!isOwner) {
-			throw new IllegalArgumentException("not owner");
+			throw new BusinessException(ErrorCode.NOT_OWNER);
 		}
 
 		entity.change(cmd);

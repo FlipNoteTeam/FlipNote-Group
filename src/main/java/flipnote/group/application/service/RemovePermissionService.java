@@ -11,6 +11,8 @@ import flipnote.group.application.port.in.result.RemovePermissionResult;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,21 +33,21 @@ public class RemovePermissionService implements RemovePermissionUseCase {
 		log.debug("{} {}", role, cmd.changeRole());
 
 		if(!role.isHigherThan(cmd.changeRole())) {
-			throw new IllegalArgumentException("host lower than changeRole");
+			throw new BusinessException(ErrorCode.PERMISSION_ROLE_TOO_LOW);
 		}
 
 		//호스트의 권한이 있는지
 		boolean existHostPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), cmd.permission());
 
 		if(!existHostPermission) {
-			throw new IllegalArgumentException("host not exist permission");
+			throw new BusinessException(ErrorCode.PERMISSION_HOST_NOT_FOUND);
 		}
 
 		//바꿀 역할의 권한이 있는지 확인
 		boolean existPermission = groupRoleRepository.existPermission(cmd.changeRole(), cmd.groupId(), cmd.permission());
 
 		if(!existPermission) {
-			throw new IllegalArgumentException("role not exist permission");
+			throw new BusinessException(ErrorCode.PERMISSION_NOT_FOUND);
 		}
 
 		List<GroupPermission> groupPermissions = groupRoleRepository.removePermission(cmd.groupId(), cmd.changeRole(),

@@ -8,6 +8,8 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.GroupRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +32,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	@Override
 	public GroupEntity findById(Long id) {
 		GroupEntity group = groupRepository.findById(id).orElseThrow(
-			() -> new IllegalArgumentException("Group not Exist")
+			() -> new BusinessException(ErrorCode.GROUP_NOT_FOUND)
 		);
 		return group;
 	}
@@ -38,7 +40,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	@Override
 	public void delete(Long groupId) {
 		if (!groupRepository.existsById(groupId)) {
-			throw new IllegalArgumentException("Group not Exist");
+			throw new BusinessException(ErrorCode.GROUP_NOT_FOUND);
 		}
 		groupRepository.deleteById(groupId);
 	}
@@ -62,7 +64,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 	public boolean checkJoinable(Long groupId) {
 
 		GroupEntity groupEntity = groupRepository.findByIdForUpdate(groupId).orElseThrow(
-			() -> new IllegalArgumentException("not exists")
+			() -> new BusinessException(ErrorCode.GROUP_NOT_FOUND)
 		);
 
 		 int maxMember = groupEntity.getMaxMember();

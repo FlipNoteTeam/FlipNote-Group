@@ -23,6 +23,8 @@ import flipnote.group.domain.model.group.Visibility;
 import flipnote.group.domain.model.join.JoinStatus;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -52,7 +54,7 @@ public class ApplicationFormService implements JoinUseCase {
 
 		//이미 가입 신청 여부
 		if(joinRepository.existsJoin(cmd.groupId(), cmd.userId())) {
-			throw new IllegalArgumentException("already join");
+			throw new BusinessException(ErrorCode.JOIN_ALREADY_EXISTS);
 		}
 
 		JoinStatus status = JoinStatus.ACCEPT;
@@ -85,7 +87,7 @@ public class ApplicationFormService implements JoinUseCase {
 		boolean checkPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), JOIN_MANAGE);
 
 		if(!checkPermission) {
-			throw new IllegalArgumentException("not permission");
+			throw new BusinessException(ErrorCode.PERMISSION_DENIED);
 		}
 
 		List<JoinEntity> joinDomainList = joinRepository.findFormList(cmd.groupId());
@@ -97,12 +99,12 @@ public class ApplicationFormService implements JoinUseCase {
 	private void checkJoinable(GroupEntity group) {
 		//비공개 그룹 인지 확인
 		if(group.getVisibility().equals(Visibility.PRIVATE)) {
-			throw new IllegalArgumentException("private group");
+			throw new BusinessException(ErrorCode.GROUP_PRIVATE);
 		}
 
 		//멤버가 최대인 경우
 		if(group.getMemberCount() >= group.getMaxMember()) {
-			throw new IllegalArgumentException("max member");
+			throw new BusinessException(ErrorCode.GROUP_MEMBER_LIMIT_EXCEEDED);
 		}
 	}
 }

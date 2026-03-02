@@ -12,6 +12,8 @@ import flipnote.group.application.port.in.result.CreateGroupResult;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.image.grpc.v1.ActivateImageRequest;
 import flipnote.image.grpc.v1.ActivateImageResponse;
 import flipnote.image.grpc.v1.GetUrlByReferenceRequest;
@@ -63,10 +65,10 @@ public class CreateGroupService implements CreateGroupUseCase {
 			imageCommandServiceStub.activateImage(request);
 		} catch (StatusRuntimeException e) {
 			switch (e.getStatus().getCode()) {
-				case NOT_FOUND -> throw new IllegalArgumentException("이미지를 찾을 수 없습니다.");
-				case INVALID_ARGUMENT -> throw new IllegalArgumentException("잘못된 요청입니다.");
-				case INTERNAL -> throw new IllegalArgumentException("이미지 서버 내부 오류입니다.");
-				default -> throw new IllegalArgumentException("이미지 서비스 오류: " + e.getStatus().getDescription());
+				case NOT_FOUND -> throw new BusinessException(ErrorCode.IMAGE_NOT_FOUND);
+				case INVALID_ARGUMENT -> throw new BusinessException(ErrorCode.IMAGE_INVALID_REQUEST);
+				case INTERNAL -> throw new BusinessException(ErrorCode.IMAGE_SERVER_ERROR);
+				default -> throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
 			}
 		}
 

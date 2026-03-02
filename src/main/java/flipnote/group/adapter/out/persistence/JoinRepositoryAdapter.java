@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.JoinEntity;
 import flipnote.group.application.port.out.JoinRepositoryPort;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.JoinRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +39,7 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 	public JoinEntity findJoin(Long joinId) {
 
 		JoinEntity entity = joinRepository.findById(joinId).orElseThrow(
-			() -> new IllegalArgumentException("not exist")
+			() -> new BusinessException(ErrorCode.JOIN_NOT_FOUND)
 		);
 		return entity;
 	}

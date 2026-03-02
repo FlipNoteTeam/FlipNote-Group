@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.application.port.in.FindGroupNameUseCase;
 import flipnote.group.application.port.out.GroupRepositoryPort;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,7 +28,7 @@ public class FindGroupNameService implements FindGroupNameUseCase {
 		GroupEntity group = groupRepository.findById(groupId);
 
 		if (group == null) {
-			throw new NoSuchElementException("Group not found: " + groupId);
+			throw new BusinessException(ErrorCode.GROUP_NOT_FOUND);
 		}
 
 		return group.getName();
