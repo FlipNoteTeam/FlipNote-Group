@@ -1,4 +1,4 @@
-package flipnote.global.constants;
+package flipnote.group.global.constants;
 
 import lombok.NoArgsConstructor;
 

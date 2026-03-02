@@ -1,6 +1,6 @@
-package flipnote.global.config;
+package flipnote.group.global.config;
 
-import flipnote.global.constants.HttpConstants;
+import flipnote.group.global.constants.HttpConstants;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
@@ -17,12 +17,12 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
             .info(new Info()
-                .title("FlipNote User/Auth API")
-                .description("FlipNote User/Auth API")
+                .title("FlipNote Group API")
+                .description("FlipNote Group API")
                 .version("1.0.0"))
             .servers(List.of(
                 new Server().url("https://api3.flipnote.site").description("Production"),
-                new Server().url("http://localhost:8081").description("Local")
+                new Server().url("http://localhost:8084").description("Local")
             ));
     }
 
