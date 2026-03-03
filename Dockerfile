@@ -11,9 +11,6 @@ RUN chmod +x gradlew
 COPY build.gradle settings.gradle ./
 COPY src ./src
 
-COPY src ./src
-COPY proto ./proto
-
 RUN ./gradlew generateProto --no-daemon
 RUN ./gradlew bootJar --no-daemon
 
