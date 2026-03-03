@@ -32,17 +32,21 @@ springdoc:
   api-docs:
     path: /groups/v3/api-docs
 
-
-image-clean:
-  batch-size: 300
-  orphan-grace-minutes: 10
-
-image:
-  default:
-    user: https://flipnote-bucket.s3.ap-northeast-2.amazonaws.com/image/default/user.png
-    group: https://flipnote-bucket.s3.ap-northeast-2.amazonaws.com/image/default/group.png
-    cardSet: https://flipnote-bucket.s3.ap-northeast-2.amazonaws.com/image/default/cardset.png
-
 logging:
   level:
     flipnote.group: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
