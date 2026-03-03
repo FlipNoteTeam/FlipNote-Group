@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
+import flipnote.user.grpc.UserQueryServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -25,5 +26,21 @@ public class GrpcClientConfig {
         ManagedChannel imageCommandChannel
     ) {
         return ImageCommandServiceGrpc.newBlockingStub(imageCommandChannel);
+    }
+
+    @Bean(destroyMethod = "shutdownNow")
+    public ManagedChannel userQueryChannel(
+        @Value("${spring.grpc.user.address:localhost:9091}") String target
+    ) {
+        return ManagedChannelBuilder.forTarget(target)
+            .usePlaintext()
+            .build();
+    }
+
+    @Bean
+    public UserQueryServiceGrpc.UserQueryServiceBlockingStub userQueryServiceStub(
+        ManagedChannel userQueryChannel
+    ) {
+        return UserQueryServiceGrpc.newBlockingStub(userQueryChannel);
     }
 }

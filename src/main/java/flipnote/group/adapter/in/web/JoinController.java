@@ -59,7 +59,6 @@ public class JoinController {
 
 	/**
 	 * 해당 그룹 가입 신청 리스트 조회
-	 * todo 유저 닉네임 추가
 	 * @param userId
 	 * @param groupId
 	 * @return
