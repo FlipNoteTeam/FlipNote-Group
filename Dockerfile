@@ -1,12 +1,18 @@
 FROM gradle:8-jdk17 AS build
 WORKDIR /app
 
+# protoc 설치 추가
+RUN apt-get update && apt-get install -y protobuf-compiler && rm -rf /var/lib/apt/lists/*
+
 COPY gradlew ./
 COPY gradle ./gradle
 RUN chmod +x gradlew
 
 COPY build.gradle settings.gradle ./
 COPY src ./src
+
+COPY src ./src
+COPY proto ./proto
 
 RUN ./gradlew generateProto --no-daemon
 RUN ./gradlew bootJar --no-daemon
