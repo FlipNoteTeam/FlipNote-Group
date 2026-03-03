@@ -75,20 +75,7 @@ protobuf {
 	protoc { artifact = "com.google.protobuf:protoc:3.25.3" }
 	plugins {
 		grpc {
-			def osName = System.getProperty("os.name").toLowerCase()
-			def osArch = System.getProperty("os.arch").toLowerCase()
-
-			if (osName.contains("win")) {
-				artifact = "io.grpc:protoc-gen-grpc-java:1.62.2:windows-x86_64@exe"
-			} else if (osName.contains("mac")) {
-				if (osArch.contains("aarch64")) {
-					artifact = "io.grpc:protoc-gen-grpc-java:1.62.2:osx-aarch_64@exe"
-				} else {
-					artifact = "io.grpc:protoc-gen-grpc-java:1.62.2:osx-x86_64@exe"
-				}
-			} else {
-				artifact = "io.grpc:protoc-gen-grpc-java:1.62.2:linux-x86_64@exe"
-			}
+			artifact = "io.grpc:protoc-gen-grpc-java:1.62.2"
 		}
 	}
 	generateProtoTasks {
