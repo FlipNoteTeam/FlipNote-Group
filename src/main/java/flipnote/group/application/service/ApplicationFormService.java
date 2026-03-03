@@ -1,6 +1,8 @@
 package flipnote.group.application.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,10 @@ import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 import flipnote.group.domain.policy.BusinessException;
 import flipnote.group.domain.policy.ErrorCode;
+import flipnote.user.grpc.GetUserResponse;
+import flipnote.user.grpc.GetUsersRequest;
+import flipnote.user.grpc.GetUsersResponse;
+import flipnote.user.grpc.UserQueryServiceGrpc;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,6 +41,7 @@ public class ApplicationFormService implements JoinUseCase {
 	private final JoinRepositoryPort joinRepository;
 	private final GroupMemberRepositoryPort groupMemberRepository;
 	private final GroupRoleRepositoryPort groupRoleRepository;
+	private final UserQueryServiceGrpc.UserQueryServiceBlockingStub userQueryServiceStub;
 
 	private static final GroupPermission JOIN_MANAGE = GroupPermission.JOIN_REQUEST_MANAGE;
 
@@ -90,10 +97,25 @@ public class ApplicationFormService implements JoinUseCase {
 			throw new BusinessException(ErrorCode.PERMISSION_DENIED);
 		}
 
-		List<JoinEntity> joinDomainList = joinRepository.findFormList(cmd.groupId());
+		List<JoinEntity> joinList = joinRepository.findFormList(cmd.groupId());
 
+		// userId 목록 추출
+		List<Long> userIds = joinList.stream()
+			.map(JoinEntity::getUserId)
+			.toList();
 
-		return FindJoinFormListResult.of(joinDomainList);
+		// gRPC로 유저 정보 한번에 조회
+		GetUsersResponse usersResponse = userQueryServiceStub.getUsers(
+			GetUsersRequest.newBuilder()
+				.addAllUserIds(userIds)
+				.build()
+		);
+
+		// userId -> UserResponse 맵핑
+		Map<Long, GetUserResponse> userMap = usersResponse.getUsersList().stream()
+			.collect(Collectors.toMap(GetUserResponse::getId, u -> u));
+
+		return FindJoinFormListResult.of(joinList, userMap);
 	}
 
 	private void checkJoinable(GroupEntity group) {

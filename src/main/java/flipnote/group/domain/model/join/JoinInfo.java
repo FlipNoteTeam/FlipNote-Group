@@ -9,7 +9,7 @@ public record JoinInfo(
 	String joinIntro,
 	JoinStatus status
 	) {
-	public static JoinInfo of(JoinEntity join) {
-		return new JoinInfo(join.getId(), join.getUserId(), "nickname", join.getForm(), join.getStatus());
+	public static JoinInfo of(JoinEntity join, String nickname) {
+		return new JoinInfo(join.getId(), join.getUserId(), nickname, join.getForm(), join.getStatus());
 	}
 }
