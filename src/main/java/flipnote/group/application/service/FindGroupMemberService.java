@@ -10,6 +10,8 @@ import flipnote.group.application.port.in.command.FindGroupMemberCommand;
 import flipnote.group.application.port.in.result.FindGroupMemberResult;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.MemberInfo;
+import flipnote.group.domain.policy.BusinessException;
+import flipnote.group.domain.policy.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,7 +29,11 @@ public class FindGroupMemberService implements FindGroupMemberUseCase {
 	@Transactional(readOnly = true)
 	public FindGroupMemberResult findGroupMember(FindGroupMemberCommand cmd) {
 
-		groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());
+		boolean isMember = groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());
+
+		if(!isMember) {
+			throw new BusinessException(ErrorCode.USER_NOT_IN_GROUP);
+		}
 
 		List<MemberInfo> memberInfoList = groupMemberRepository.findMemberInfo(cmd.groupId());
 		
