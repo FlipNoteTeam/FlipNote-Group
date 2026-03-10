@@ -46,13 +46,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	 * @param userId
 	 */
 	@Override
-	public void existsUserInGroup(Long groupId, Long userId) {
+	public boolean existsUserInGroup(Long groupId, Long userId) {
 
 		boolean isMember = groupMemberRepository.existsByGroupIdAndUserId(groupId, userId);
 
-		if(!isMember) {
-			throw new BusinessException(ErrorCode.USER_NOT_IN_GROUP);
-		}
+		return isMember;
 	}
 
 	/**

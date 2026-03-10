@@ -42,7 +42,11 @@ public class FindGroupService implements FindGroupUseCase {
 	public FindGroupResult findGroup(FindGroupCommand cmd) {
 
 		// 유저가 그룹 내에 존재하는지 확인
-		groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());
+		boolean isMember = groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());
+
+		if(!isMember) {
+			throw new BusinessException(ErrorCode.USER_NOT_IN_GROUP);
+		}
 
 		GroupEntity group = groupRepository.findById(cmd.groupId());
 
