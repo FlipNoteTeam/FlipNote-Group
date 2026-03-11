@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.group.adapter.out.entity.QGroupEntity;
@@ -53,7 +54,8 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 				group.name,
 				group.description,
 				group.category,
-				group.imageRefId
+				group.imageRefId,
+				Expressions.nullExpression(String.class)
 			))
 			.from(group)
 			.where(where)
@@ -92,7 +94,8 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 				group.name,
 				group.description,
 				group.category,
-				group.imageRefId
+				group.imageRefId,
+				Expressions.nullExpression(String.class)
 			))
 			.from(groupMember)
 			.join(group).on(group.id.eq(groupMember.groupId))
@@ -120,7 +123,8 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 				group.name,
 				group.description,
 				group.category,
-				group.imageRefId
+				group.imageRefId,
+				Expressions.nullExpression(String.class)
 			))
 			.from(group)
 			.join(groupMember).on(groupMember.groupId.eq(group.id))
