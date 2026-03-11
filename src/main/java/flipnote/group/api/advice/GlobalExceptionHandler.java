@@ -6,23 +6,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import flipnote.group.domain.policy.BusinessException;
-import flipnote.group.domain.policy.ErrorCode;
+import flipnote.group.global.response.ApiResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handle(BusinessException e) {
-        ErrorCode errorCode = e.getErrorCode();
-        return ResponseEntity
-            .status(errorCode.getStatus())
-            .body(ErrorResponse.of(errorCode));
-    }
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<ApiResponse<Void>> handle(BusinessException e) {
+		return ResponseEntity.status(e.getErrorCode().getStatus()).body(ApiResponse.error(e.getErrorCode()));
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handle(Exception e) {
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
-    }
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ApiResponse<Void>> handle(Exception e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.internalError());
+	}
 }
