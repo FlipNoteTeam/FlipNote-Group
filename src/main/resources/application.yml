@@ -34,7 +34,7 @@ springdoc:
 
 logging:
   level:
-    flipnote.group: DEBUG
+    group: DEBUG
 
 management:
   endpoints:
@@ -50,3 +50,8 @@ management:
       enabled: true
     readinessState:
       enabled: true
+
+image:
+  default:
+    group: https://flipnote-bucket.s3.ap-northeast-2.amazonaws.com/image/default/group.png
+

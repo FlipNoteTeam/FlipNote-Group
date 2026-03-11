@@ -22,7 +22,9 @@ import flipnote.image.grpc.v1.ImageCommandServiceGrpc;
 import flipnote.image.grpc.v1.Type;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateGroupService implements CreateGroupUseCase {
@@ -49,27 +51,34 @@ public class CreateGroupService implements CreateGroupUseCase {
 		//그룹 역할 생성
 		RoleEntity role = groupRoleRepository.create(groupId);
 
+		log.debug("{}", role.getId());
+
 		//생성자 오너 역할로 저장
 		GroupMemberEntity groupMember = GroupMemberEntity.create(groupId, cmd.userId(), role);
 
 		groupMemberRepository.save(groupMember);
 
-		// gRPC로 image 서비스에 url 조회
-		ActivateImageRequest request = ActivateImageRequest.newBuilder()
-			.setImageRefId(cmd.imageRefId())
-			.setReferenceType(Type.GROUP)
-			.setReferenceId(groupId)
-			.build();
+		log.debug("{}", groupMember.getId());
 
-		try {
-			imageCommandServiceStub.activateImage(request);
-		} catch (StatusRuntimeException e) {
-			switch (e.getStatus().getCode()) {
-				case NOT_FOUND -> throw new BusinessException(ErrorCode.IMAGE_NOT_FOUND);
-				case INVALID_ARGUMENT -> throw new BusinessException(ErrorCode.IMAGE_INVALID_REQUEST);
-				case INTERNAL -> throw new BusinessException(ErrorCode.IMAGE_SERVER_ERROR);
-				default -> throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
+		if (cmd.imageRefId() != null) {
+			ActivateImageRequest request = ActivateImageRequest.newBuilder()
+				.setImageRefId(cmd.imageRefId())
+				.setReferenceType(Type.GROUP)
+				.setReferenceId(groupId)
+				.build();
+			// gRPC 호출
+
+			try {
+				imageCommandServiceStub.activateImage(request);
+			} catch (StatusRuntimeException e) {
+				switch (e.getStatus().getCode()) {
+					case NOT_FOUND -> throw new BusinessException(ErrorCode.IMAGE_NOT_FOUND);
+					case INVALID_ARGUMENT -> throw new BusinessException(ErrorCode.IMAGE_INVALID_REQUEST);
+					case INTERNAL -> throw new BusinessException(ErrorCode.IMAGE_SERVER_ERROR);
+					default -> throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
+				}
 			}
+			return CreateGroupResult.of(groupId);
 		}
 
 		return CreateGroupResult.of(groupId);
