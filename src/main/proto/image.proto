@@ -15,8 +15,6 @@ service ImageCommandService {
   rpc ActivateImage(ActivateImageRequest) returns (ActivateImageResponse);
   // 이미지 변경
   rpc ChangeImage(ChangeImageRequest) returns (ChangeImageResponse);
-  // 이미지 삭제
-  rpc DeleteById(DeleteByIdRequest) returns (DeleteByIdResponse);
 }
 
 enum Type {
@@ -50,6 +48,7 @@ message ActivateImageRequest {
 }
 
 message ActivateImageResponse {
+  string url = 1;
 }
 
 message ChangeImageRequest {
