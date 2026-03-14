@@ -11,6 +11,8 @@ public class MemberInfo {
 	private Long memberId;
 	private Long userId;
 	private GroupMemberRole role;
+	private String nickname;
+	private String profileImage;
 
 	@Builder
 	private MemberInfo(Long memberId, Long userId, GroupMemberRole role) {
@@ -18,4 +20,10 @@ public class MemberInfo {
 		this.userId = userId;
 		this.role = role;
 	}
+
+	public void updateUserInfo(String nickname, String profileImage) {
+		this.nickname = nickname;
+		this.profileImage = profileImage;
+	}
+
 }
