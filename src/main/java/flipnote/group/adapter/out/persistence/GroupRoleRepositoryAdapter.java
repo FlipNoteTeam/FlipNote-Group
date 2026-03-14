@@ -33,15 +33,18 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 		Map.of(
 			GroupMemberRole.OWNER, List.of(
 				GroupPermission.MEMBER_MANAGE,
-				GroupPermission.JOIN_REQUEST_MANAGE
+				GroupPermission.JOIN_REQUEST_MANAGE,
+				GroupPermission.INVITE
 			),
 			GroupMemberRole.HEAD_MANAGER, List.of(
 				GroupPermission.MEMBER_MANAGE,
-				GroupPermission.JOIN_REQUEST_MANAGE
+				GroupPermission.JOIN_REQUEST_MANAGE,
+				GroupPermission.INVITE
 			),
 			GroupMemberRole.MANAGER, List.of(
 				GroupPermission.MEMBER_MANAGE,
-				GroupPermission.JOIN_REQUEST_MANAGE
+				GroupPermission.JOIN_REQUEST_MANAGE,
+				GroupPermission.INVITE
 			),
 			GroupMemberRole.MEMBER, List.of()
 		);
