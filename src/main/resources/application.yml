@@ -55,3 +55,10 @@ image:
   default:
     group: https://flipnote-bucket.s3.ap-northeast-2.amazonaws.com/image/default/group.png
 
+app:
+  resend:
+    api-key: ${RESEND_API_KEY}
+    from-email: ${RESEND_FROM_EMAIL:FlipNote <no-reply@flipnote.site>}
+  client:
+    url: ${APP_CLIENT_URL:https://flipnote.site}
+

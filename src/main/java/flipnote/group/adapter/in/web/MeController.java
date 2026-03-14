@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import flipnote.group.api.dto.response.FindIncomingInviteListResponseDto;
 import flipnote.group.api.dto.response.FindMyJoinListResponseDto;
+import flipnote.group.application.port.in.FindInviteUseCase;
 import flipnote.group.application.port.in.FindMyJoinListUseCase;
+import flipnote.group.application.port.in.result.FindIncomingInviteListResult;
 import flipnote.group.application.port.in.result.FindMyJoinListResult;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class MeController {
 
 	private final FindMyJoinListUseCase findMyJoinListUseCase;
+	private final FindInviteUseCase findInviteUseCase;
 
 	/**
 	 * 내가 신청한 가입신청 리스트 조회
@@ -30,6 +34,22 @@ public class MeController {
 		FindMyJoinListResult result = findMyJoinListUseCase.findMyJoinList(userId);
 
 		FindMyJoinListResponseDto res = FindMyJoinListResponseDto.from(result);
+
+		return ResponseEntity.ok(res);
+	}
+
+	/**
+	 * 내가 받은 초대 리스트 조회
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/invitations/me")
+	public ResponseEntity<FindIncomingInviteListResponseDto> findIncomingInvites(
+		@RequestHeader("X-USER-ID") Long userId
+	) {
+		FindIncomingInviteListResult result = findInviteUseCase.findIncomingInvites(userId);
+
+		FindIncomingInviteListResponseDto res = FindIncomingInviteListResponseDto.from(result);
 
 		return ResponseEntity.ok(res);
 	}

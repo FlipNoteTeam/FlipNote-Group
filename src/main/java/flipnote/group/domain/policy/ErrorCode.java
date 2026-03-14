@@ -48,6 +48,12 @@ public enum ErrorCode {
     IMAGE_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "IMAGE_003", "이미지 서버 내부 오류입니다"),
     IMAGE_SERVICE_ERROR(HttpStatus.BAD_GATEWAY, "IMAGE_004", "이미지 서비스 오류입니다"),
 
+    // Invite
+    INVITE_ALREADY_EXISTS(HttpStatus.CONFLICT, "INVITE_001", "이미 초대된 사용자입니다"),
+    INVITE_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "INVITE_002", "해당 그룹에 초대할 권한이 없습니다"),
+    INVITE_NOT_FOUND(HttpStatus.NOT_FOUND, "INVITE_003", "유효하지 않은 초대입니다"),
+    INVITE_SELF_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "INVITE_004", "본인을 초대할 수 없습니다"),
+
     // Common
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "COMMON_001", "잘못된 입력입니다"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 오류가 발생했습니다");
