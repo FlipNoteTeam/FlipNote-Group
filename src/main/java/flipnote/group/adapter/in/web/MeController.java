@@ -39,11 +39,11 @@ public class MeController {
 	}
 
 	/**
-	 * 내가 받은 초대 리스트 조회
+	 * 내가 받은 그룹 초대 리스트 조회
 	 * @param userId
 	 * @return
 	 */
-	@GetMapping("/invitations/me")
+	@GetMapping("/group-invitations")
 	public ResponseEntity<FindIncomingInviteListResponseDto> findIncomingInvites(
 		@RequestHeader("X-USER-ID") Long userId
 	) {
