@@ -2,6 +2,8 @@ package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import flipnote.group.adapter.out.entity.InviteEntity;
@@ -46,8 +48,18 @@ public class InviteRepositoryAdapter implements InviteRepositoryPort {
 	}
 
 	@Override
+	public Page<InviteEntity> findAllByGroupId(Long groupId, Pageable pageable) {
+		return inviteJpaRepository.findAllByGroupId(groupId, pageable);
+	}
+
+	@Override
 	public List<InviteEntity> findAllByInviteeUserId(Long inviteeUserId) {
 		return inviteJpaRepository.findAllByInviteeUserId(inviteeUserId);
+	}
+
+	@Override
+	public Page<InviteEntity> findAllByInviteeUserId(Long inviteeUserId, Pageable pageable) {
+		return inviteJpaRepository.findAllByInviteeUserId(inviteeUserId, pageable);
 	}
 
 	@Override

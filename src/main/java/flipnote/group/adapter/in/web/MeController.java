@@ -2,16 +2,19 @@ package flipnote.group.adapter.in.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import flipnote.group.api.dto.response.FindIncomingInviteListResponseDto;
+import flipnote.group.api.dto.request.InviteListRequest;
 import flipnote.group.api.dto.response.FindMyJoinListResponseDto;
+import flipnote.group.api.dto.response.PagingResponseDto;
 import flipnote.group.application.port.in.FindInviteUseCase;
 import flipnote.group.application.port.in.FindMyJoinListUseCase;
-import flipnote.group.application.port.in.result.FindIncomingInviteListResult;
 import flipnote.group.application.port.in.result.FindMyJoinListResult;
+import flipnote.group.domain.model.invite.InviteMyInfo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,15 +44,15 @@ public class MeController {
 	/**
 	 * 내가 받은 초대 리스트 조회
 	 * @param userId
+	 * @param req
 	 * @return
 	 */
-	@GetMapping("/invitations/me")
-	public ResponseEntity<FindIncomingInviteListResponseDto> findIncomingInvites(
-		@RequestHeader("X-USER-ID") Long userId
+	@GetMapping("/group-invitations/me")
+	public ResponseEntity<PagingResponseDto<InviteMyInfo>> findIncomingInvites(
+		@RequestHeader("X-USER-ID") Long userId,
+		@Valid @ModelAttribute InviteListRequest req
 	) {
-		FindIncomingInviteListResult result = findInviteUseCase.findIncomingInvites(userId);
-
-		FindIncomingInviteListResponseDto res = FindIncomingInviteListResponseDto.from(result);
+		PagingResponseDto<InviteMyInfo> res = findInviteUseCase.findIncomingInvites(userId, req.getPageRequest());
 
 		return ResponseEntity.ok(res);
 	}

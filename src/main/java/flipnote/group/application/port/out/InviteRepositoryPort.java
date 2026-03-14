@@ -2,6 +2,9 @@ package flipnote.group.application.port.out;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import flipnote.group.adapter.out.entity.InviteEntity;
 import flipnote.group.domain.model.invite.InviteStatus;
 
@@ -17,7 +20,11 @@ public interface InviteRepositoryPort {
 
 	List<InviteEntity> findAllByGroupId(Long groupId);
 
+	Page<InviteEntity> findAllByGroupId(Long groupId, Pageable pageable);
+
 	List<InviteEntity> findAllByInviteeUserId(Long inviteeUserId);
+
+	Page<InviteEntity> findAllByInviteeUserId(Long inviteeUserId, Pageable pageable);
 
 	boolean existsByGroupIdAndInviteeUserIdAndStatus(Long groupId, Long inviteeUserId, InviteStatus status);
 
