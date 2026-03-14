@@ -3,6 +3,8 @@ package flipnote.group.infrastructure.persistence.jpa;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +23,11 @@ public interface InviteJpaRepository extends JpaRepository<InviteEntity, Long> {
 
 	List<InviteEntity> findAllByGroupId(Long groupId);
 
+	Page<InviteEntity> findAllByGroupId(Long groupId, Pageable pageable);
+
 	List<InviteEntity> findAllByInviteeUserId(Long inviteeUserId);
+
+	Page<InviteEntity> findAllByInviteeUserId(Long inviteeUserId, Pageable pageable);
 
 	boolean existsByGroupIdAndInviteeUserIdAndStatus(Long groupId, Long inviteeUserId, InviteStatus status);
 

@@ -5,14 +5,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.InviteEntity;
+import flipnote.group.api.dto.response.PagingResponseDto;
 import flipnote.group.application.port.in.FindInviteUseCase;
 import flipnote.group.application.port.in.command.FindOutgoingInviteCommand;
-import flipnote.group.application.port.in.result.FindIncomingInviteListResult;
-import flipnote.group.application.port.in.result.FindOutgoingInviteListResult;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.application.port.out.InviteRepositoryPort;
 import flipnote.group.domain.model.invite.InviteInfo;
@@ -38,17 +39,17 @@ public class FindInviteService implements FindInviteUseCase {
 	private static final GroupPermission INVITE_PERMISSION = GroupPermission.INVITE;
 
 	@Override
-	public FindOutgoingInviteListResult findOutgoingInvites(FindOutgoingInviteCommand cmd) {
+	public PagingResponseDto<InviteInfo> findOutgoingInvites(FindOutgoingInviteCommand cmd) {
 		// INVITE 권한 체크
 		boolean hasPermission = groupRoleRepository.checkPermission(cmd.userId(), cmd.groupId(), INVITE_PERMISSION);
 		if (!hasPermission) {
 			throw new BusinessException(ErrorCode.INVITE_PERMISSION_DENIED);
 		}
 
-		List<InviteEntity> inviteList = inviteRepository.findAllByGroupId(cmd.groupId());
+		Page<InviteEntity> invitePage = inviteRepository.findAllByGroupId(cmd.groupId(), cmd.pageable());
 
 		// inviteeUserId 목록 추출 (null 제외 - 비회원 초대)
-		List<Long> inviteeUserIds = inviteList.stream()
+		List<Long> inviteeUserIds = invitePage.getContent().stream()
 			.map(InviteEntity::getInviteeUserId)
 			.filter(Objects::nonNull)
 			.toList();
@@ -66,24 +67,19 @@ public class FindInviteService implements FindInviteUseCase {
 		}
 
 		Map<Long, String> finalIdAndNicknames = idAndNicknames;
-		List<InviteInfo> inviteInfoList = inviteList.stream()
-			.map(invite -> InviteInfo.of(
-				invite,
-				finalIdAndNicknames.getOrDefault(invite.getInviteeUserId(), "")
-			))
-			.toList();
+		Page<InviteInfo> res = invitePage.map(invite -> InviteInfo.of(
+			invite,
+			finalIdAndNicknames.getOrDefault(invite.getInviteeUserId(), "")
+		));
 
-		return new FindOutgoingInviteListResult(inviteInfoList);
+		return PagingResponseDto.from(res);
 	}
 
 	@Override
-	public FindIncomingInviteListResult findIncomingInvites(Long inviteeUserId) {
-		List<InviteEntity> inviteList = inviteRepository.findAllByInviteeUserId(inviteeUserId);
+	public PagingResponseDto<InviteMyInfo> findIncomingInvites(Long inviteeUserId, Pageable pageable) {
+		Page<InviteEntity> invitePage = inviteRepository.findAllByInviteeUserId(inviteeUserId, pageable);
 
-		List<InviteMyInfo> inviteMyInfoList = inviteList.stream()
-			.map(InviteMyInfo::of)
-			.toList();
-
-		return new FindIncomingInviteListResult(inviteMyInfoList);
+		Page<InviteMyInfo> res = invitePage.map(InviteMyInfo::of);
+		return PagingResponseDto.from(res);
 	}
 }
