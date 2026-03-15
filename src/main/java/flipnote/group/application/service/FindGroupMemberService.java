@@ -38,12 +38,6 @@ public class FindGroupMemberService implements FindGroupMemberUseCase {
 	@Transactional(readOnly = true)
 	public FindGroupMemberResult findGroupMember(FindGroupMemberCommand cmd) {
 
-		boolean isMember = groupMemberRepository.existsUserInGroup(cmd.groupId(), cmd.userId());
-
-		if(!isMember) {
-			throw new BusinessException(ErrorCode.USER_NOT_IN_GROUP);
-		}
-
 		List<MemberInfo> memberInfoList = groupMemberRepository.findMemberInfo(cmd.groupId());
 
 		List<Long> ids = memberInfoList.stream()
