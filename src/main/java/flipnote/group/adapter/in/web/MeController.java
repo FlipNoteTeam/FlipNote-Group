@@ -47,7 +47,7 @@ public class MeController {
 	 * @param req
 	 * @return
 	 */
-	@GetMapping("/group-invitations/me")
+	@GetMapping("/group-invitations")
 	public ResponseEntity<PagingResponseDto<InviteMyInfo>> findIncomingInvites(
 		@RequestHeader("X-USER-ID") Long userId,
 		@Valid @ModelAttribute InviteListRequest req
