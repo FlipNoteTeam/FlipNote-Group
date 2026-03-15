@@ -71,7 +71,7 @@ public class JoinRespondService implements JoinRespondUseCase {
 		}
 		
 		//가입 가능한 경우
-		RoleEntity role = groupRoleRepository.findByIdAndRole(cmd.groupId(), GroupMemberRole.MEMBER);
+		RoleEntity role = groupRoleRepository.findByGroupIdAndRole(cmd.groupId(), GroupMemberRole.MEMBER);
 
 		//주의: cmd의 유저가 아닌 join의 아이디로 해야함
 		GroupMemberEntity groupMember = GroupMemberEntity.create(cmd.groupId(), join.getUserId(), role);

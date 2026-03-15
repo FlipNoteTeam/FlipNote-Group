@@ -110,4 +110,11 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	public boolean checkMember(Long memberId) {
 		return groupMemberRepository.existsById(memberId);
 	}
+
+	@Override
+	public GroupMemberEntity findById(Long memberId) {
+		return groupMemberRepository.findById(memberId).orElseThrow(
+			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
+		);
+	}
 }
