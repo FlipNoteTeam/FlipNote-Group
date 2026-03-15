@@ -21,7 +21,7 @@ public interface GroupRoleRepositoryPort {
 
 	List<GroupPermission> findMyRolePermission(Long groupId, GroupMemberRole role);
 
-	RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole);
+	RoleEntity findByGroupIdAndRole(Long groupId, GroupMemberRole groupMemberRole);
 
 	GroupMemberRole findRole(Long userId, Long groupId);
 }

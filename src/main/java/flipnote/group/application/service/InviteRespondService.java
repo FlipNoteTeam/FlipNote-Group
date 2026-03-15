@@ -51,7 +51,7 @@ public class InviteRespondService implements InviteRespondUseCase {
 					throw new BusinessException(ErrorCode.GROUP_MEMBER_LIMIT_EXCEEDED);
 				}
 
-				RoleEntity role = groupRoleRepository.findByIdAndRole(cmd.groupId(), GroupMemberRole.MEMBER);
+				RoleEntity role = groupRoleRepository.findByGroupIdAndRole(cmd.groupId(), GroupMemberRole.MEMBER);
 				GroupMemberEntity groupMember = GroupMemberEntity.create(cmd.groupId(), cmd.inviteeUserId(), role);
 				groupMemberRepository.save(groupMember);
 			}

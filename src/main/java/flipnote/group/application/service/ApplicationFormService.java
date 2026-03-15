@@ -74,7 +74,7 @@ public class ApplicationFormService implements JoinUseCase {
 		joinRepository.save(join);
 
 		if(join.getStatus().equals(JoinStatus.ACCEPT)) {
-			RoleEntity role = groupRoleRepository.findByIdAndRole(group.getId(), GroupMemberRole.MEMBER);
+			RoleEntity role = groupRoleRepository.findByGroupIdAndRole(group.getId(), GroupMemberRole.MEMBER);
 
 			GroupMemberEntity groupMember = GroupMemberEntity.create(group.getId(), cmd.userId(), role);
 			groupMemberRepository.save(groupMember);

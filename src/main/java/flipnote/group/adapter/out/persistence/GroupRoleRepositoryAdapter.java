@@ -162,8 +162,8 @@ public class GroupRoleRepositoryAdapter implements GroupRoleRepositoryPort {
 	}
 
 	@Override
-	public RoleEntity findByIdAndRole(Long id, GroupMemberRole groupMemberRole) {
-		return groupRoleRepository.findByGroupIdAndRole(id, groupMemberRole).orElseThrow(
+	public RoleEntity findByGroupIdAndRole(Long groupId, GroupMemberRole groupMemberRole) {
+		return groupRoleRepository.findByGroupIdAndRole(groupId, groupMemberRole).orElseThrow(
 			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
 	}

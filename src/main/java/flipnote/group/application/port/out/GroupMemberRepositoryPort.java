@@ -19,4 +19,6 @@ public interface GroupMemberRepositoryPort {
     void deleteGroupMember(Long memberId);
 
     boolean checkMember(Long memberId);
+
+    GroupMemberEntity findById(Long memberId);
 }

@@ -77,4 +77,8 @@ public class GroupMemberEntity extends BaseEntity {
 			.role(this.getRole().getRole())
 			.build();
 	}
+
+	public void changeRole(RoleEntity role) {
+		this.role = role;
+	}
 }
