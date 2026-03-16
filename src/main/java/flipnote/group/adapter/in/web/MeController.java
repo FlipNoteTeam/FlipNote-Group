@@ -30,7 +30,7 @@ public class MeController {
 	 * @param userId
 	 * @return
 	 */
-	@GetMapping("/joins/me")
+	@GetMapping("/groups/joins/me")
 	public ResponseEntity<FindMyJoinListResponseDto> findGroupJoinMe(
 		@RequestHeader("X-USER-ID") Long userId
 	) {
