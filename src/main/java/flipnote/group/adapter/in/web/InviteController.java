@@ -44,7 +44,7 @@ public class InviteController {
 	@PostMapping("")
 	public ResponseEntity<CreateInviteResponseDto> createInvite(
 		@RequestHeader("X-USER-ID") Long userId,
-		@RequestHeader("X-USER-EMAIL") String userEmail,
+		@RequestHeader("X-User-Email") String userEmail,
 		@PathVariable("groupId") Long groupId,
 		@Valid @RequestBody CreateInviteRequestDto req
 	) {
