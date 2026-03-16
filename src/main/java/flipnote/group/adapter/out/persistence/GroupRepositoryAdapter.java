@@ -57,7 +57,7 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 	@Override
 	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId) {
-		return findAllByCursorAndCreatedUserId(cursorId, category, size, userId);
+		return groupRepository.findAllByCursorAndCreatedUserId(cursorId, category, size, userId);
 	}
 
 	@Override
