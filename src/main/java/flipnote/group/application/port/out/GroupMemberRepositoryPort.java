@@ -4,6 +4,7 @@ import java.util.List;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.domain.model.member.MemberInfo;
+import flipnote.group.domain.model.permission.GroupPermission;
 
 public interface GroupMemberRepositoryPort {
     void save(GroupMemberEntity groupMember);
@@ -21,4 +22,6 @@ public interface GroupMemberRepositoryPort {
     boolean checkMember(Long memberId);
 
     GroupMemberEntity findById(Long memberId);
+
+    List<Long> findUserIdsByPermission(Long groupId, GroupPermission permission);
 }

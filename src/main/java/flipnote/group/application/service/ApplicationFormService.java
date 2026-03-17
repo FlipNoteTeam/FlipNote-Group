@@ -11,6 +11,7 @@ import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.adapter.out.entity.JoinEntity;
 import flipnote.group.adapter.out.entity.RoleEntity;
+import flipnote.group.application.dto.GroupJoinRequestMessage;
 import flipnote.group.application.port.in.JoinUseCase;
 import flipnote.group.application.port.in.command.ApplicationFormCommand;
 import flipnote.group.application.port.in.command.FindJoinFormCommand;
@@ -20,6 +21,7 @@ import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.application.port.out.JoinRepositoryPort;
+import flipnote.group.application.port.out.NotificationMessagePort;
 import flipnote.group.domain.model.group.JoinPolicy;
 import flipnote.group.domain.model.group.Visibility;
 import flipnote.group.domain.model.join.JoinStatus;
@@ -27,21 +29,25 @@ import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.permission.GroupPermission;
 import flipnote.group.domain.policy.BusinessException;
 import flipnote.group.domain.policy.ErrorCode;
+import flipnote.user.grpc.GetUserRequest;
 import flipnote.user.grpc.GetUserResponse;
 import flipnote.user.grpc.GetUsersRequest;
 import flipnote.user.grpc.GetUsersResponse;
 import flipnote.user.grpc.UserQueryServiceGrpc;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplicationFormService implements JoinUseCase {
-	
+
 	private final GroupRepositoryPort groupRepository;
 	private final JoinRepositoryPort joinRepository;
 	private final GroupMemberRepositoryPort groupMemberRepository;
 	private final GroupRoleRepositoryPort groupRoleRepository;
 	private final UserQueryServiceGrpc.UserQueryServiceBlockingStub userQueryServiceStub;
+	private final NotificationMessagePort notificationMessagePort;
 
 	private static final GroupPermission JOIN_MANAGE = GroupPermission.JOIN_REQUEST_MANAGE;
 
@@ -80,6 +86,10 @@ public class ApplicationFormService implements JoinUseCase {
 			groupMemberRepository.save(groupMember);
 		}
 
+		if (join.getStatus().equals(JoinStatus.PENDING)) {
+			publishJoinRequestMessage(cmd.groupId(), cmd.userId());
+		}
+
 		return ApplicationFormResult.of(join);
 	}
 
@@ -116,6 +126,27 @@ public class ApplicationFormService implements JoinUseCase {
 			.collect(Collectors.toMap(GetUserResponse::getId, u -> u));
 
 		return FindJoinFormListResult.of(joinList, userMap);
+	}
+
+	private void publishJoinRequestMessage(Long groupId, Long requesterId) {
+		try {
+			List<Long> receiverIds = groupMemberRepository.findUserIdsByPermission(
+				groupId, GroupPermission.JOIN_REQUEST_MANAGE
+			);
+
+			GetUserResponse requester = userQueryServiceStub.getUser(
+				GetUserRequest.newBuilder().setUserId(requesterId).build()
+			);
+
+			notificationMessagePort.sendGroupJoinRequest(new GroupJoinRequestMessage(
+				groupId,
+				receiverIds,
+				requesterId,
+				requester.getNickname()
+			));
+		} catch (Exception e) {
+			log.error("GroupJoinRequestMessage 발행 실패: groupId={}, requesterId={}", groupId, requesterId, e);
+		}
 	}
 
 	private void checkJoinable(GroupEntity group) {

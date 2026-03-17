@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import flipnote.group.adapter.out.entity.GroupEntity;
 import flipnote.group.adapter.out.entity.InviteEntity;
+import flipnote.group.application.dto.GroupInviteMessage;
 import flipnote.group.application.port.in.CreateInviteUseCase;
 import flipnote.group.application.port.in.command.CreateInviteCommand;
 import flipnote.group.application.port.in.result.CreateInviteResult;
@@ -13,6 +14,7 @@ import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.application.port.out.GroupRepositoryPort;
 import flipnote.group.application.port.out.GroupRoleRepositoryPort;
 import flipnote.group.application.port.out.InviteRepositoryPort;
+import flipnote.group.application.port.out.NotificationMessagePort;
 import flipnote.group.domain.event.GuestInviteCreatedEvent;
 import flipnote.group.domain.model.invite.InviteStatus;
 import flipnote.group.domain.model.permission.GroupPermission;
@@ -35,6 +37,7 @@ public class CreateInviteService implements CreateInviteUseCase {
 	private final GroupRepositoryPort groupRepository;
 	private final UserQueryServiceGrpc.UserQueryServiceBlockingStub userQueryServiceStub;
 	private final ApplicationEventPublisher eventPublisher;
+	private final NotificationMessagePort notificationMessagePort;
 
 	@Override
 	@Transactional
@@ -94,6 +97,13 @@ public class CreateInviteService implements CreateInviteUseCase {
 
 		InviteEntity invite = InviteEntity.create(groupId, inviterUserId, inviteeUserId, inviteeEmail);
 		inviteRepository.save(invite);
+
+		try {
+			GroupEntity group = groupRepository.findById(groupId);
+			notificationMessagePort.sendGroupInvite(new GroupInviteMessage(groupId, inviteeUserId, group.getName()));
+		} catch (Exception e) {
+			log.error("GroupInviteMessage 발행 실패: groupId={}, inviteeId={}", groupId, inviteeUserId, e);
+		}
 
 		return invite.getId();
 	}
