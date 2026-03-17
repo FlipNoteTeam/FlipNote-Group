@@ -1,5 +1,7 @@
 package flipnote.group.infrastructure.messaging;
 
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -14,14 +16,17 @@ public class RabbitMQConfig {
 	public static final String GROUP_JOIN_REQUEST_ROUTING_KEY = "notification.group.join-request";
 
 	@Bean
+	public TopicExchange notificationExchange() {
+		return new TopicExchange(EXCHANGE, true, false);
+	}
+
+	@Bean
 	public MessageConverter jackson2JsonMessageConverter() {
 		return new JacksonJsonMessageConverter();
 	}
 
 	@Bean
-	public RabbitTemplate rabbitTemplate(
-		org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory
-	) {
+	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
 		RabbitTemplate template = new RabbitTemplate(connectionFactory);
 		template.setMessageConverter(jackson2JsonMessageConverter());
 		return template;
