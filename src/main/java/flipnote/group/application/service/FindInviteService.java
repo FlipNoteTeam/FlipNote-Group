@@ -67,10 +67,15 @@ public class FindInviteService implements FindInviteUseCase {
 		}
 
 		Map<Long, String> finalIdAndNicknames = idAndNicknames;
-		Page<InviteInfo> res = invitePage.map(invite -> InviteInfo.of(
-			invite,
-			finalIdAndNicknames.getOrDefault(invite.getInviteeUserId(), "")
-		));
+		Page<InviteInfo> res = invitePage.map(invite -> {
+			String nickname;
+			if (invite.getInviteeUserId() == null) {
+				nickname = invite.getInviteeEmail();
+			} else {
+				nickname = finalIdAndNicknames.getOrDefault(invite.getInviteeUserId(), "");
+			}
+			return InviteInfo.of(invite, nickname);
+		});
 
 		return PagingResponseDto.from(res);
 	}
