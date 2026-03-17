@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import flipnote.group.adapter.out.entity.GroupMemberEntity;
+import flipnote.group.domain.model.permission.GroupPermission;
 
 public interface GroupMemberRepository
 	extends JpaRepository<GroupMemberEntity, Long> {
@@ -24,4 +25,11 @@ public interface GroupMemberRepository
 	Optional<GroupMemberEntity> findByGroupIdAndUserId(Long groupId, Long userId);
 
 	boolean existsByUserIdAndRole_Id(Long userId, Long id);
+
+	@Query("""
+    select gm.userId from GroupMemberEntity gm
+    join PermissionEntity pe on pe.groupRoleId = gm.role.id
+    where gm.groupId = :groupId and pe.permission = :permission
+""")
+	List<Long> findUserIdsByGroupIdAndPermission(Long groupId, GroupPermission permission);
 }

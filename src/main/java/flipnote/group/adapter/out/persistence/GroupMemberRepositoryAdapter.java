@@ -11,6 +11,7 @@ import flipnote.group.adapter.out.entity.GroupMemberEntity;
 import flipnote.group.application.port.out.GroupMemberRepositoryPort;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import flipnote.group.domain.model.member.MemberInfo;
+import flipnote.group.domain.model.permission.GroupPermission;
 import flipnote.group.domain.policy.BusinessException;
 import flipnote.group.domain.policy.ErrorCode;
 import flipnote.group.infrastructure.persistence.jpa.GroupMemberRepository;
@@ -116,5 +117,10 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 		return groupMemberRepository.findById(memberId).orElseThrow(
 			() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)
 		);
+	}
+
+	@Override
+	public List<Long> findUserIdsByPermission(Long groupId, GroupPermission permission) {
+		return groupMemberRepository.findUserIdsByGroupIdAndPermission(groupId, permission);
 	}
 }
