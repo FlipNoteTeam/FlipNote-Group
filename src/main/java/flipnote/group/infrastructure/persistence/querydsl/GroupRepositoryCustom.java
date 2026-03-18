@@ -6,9 +6,9 @@ import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
 
 public interface GroupRepositoryCustom {
-	List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize);
+	List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize, String groupName);
 
-	List<GroupInfo> findAllByCursorAndUserId(Long lastId, Category category, int pageSize, Long userId);
+	List<GroupInfo> findAllByCursorAndUserId(Long lastId, Category category, int pageSize, Long userId, String groupName);
 
-	List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long id);
+	List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long id, String groupName);
 }

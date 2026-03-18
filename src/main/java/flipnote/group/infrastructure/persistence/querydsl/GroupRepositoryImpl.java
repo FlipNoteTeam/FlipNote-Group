@@ -33,7 +33,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize) {
+	public List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize, String groupName) {
 		//삭제되지 않은
 		BooleanBuilder where = new BooleanBuilder()
 			.and(group.deletedAt.isNull());
@@ -41,6 +41,10 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 		//커서 기반
 		if (lastId != null) {
 			where.and(group.id.lt(lastId));
+		}
+
+		if (groupName != null && !groupName.isBlank()) {
+			where.and(group.name.contains(groupName));
 		}
 
 		//카테고리 제한
@@ -73,7 +77,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public List<GroupInfo> findAllByCursorAndUserId(Long lastId, Category category, int pageSize, Long userId) {
+	public List<GroupInfo> findAllByCursorAndUserId(Long lastId, Category category, int pageSize, Long userId, String groupName) {
 
 		BooleanBuilder where = new BooleanBuilder()
 			.and(group.deletedAt.isNull())
@@ -81,6 +85,10 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 
 		if (lastId != null) {
 			where.and(group.id.lt(lastId));
+		}
+
+		if (groupName != null && !groupName.isBlank()) {
+			where.and(group.name.contains(groupName));
 		}
 
 		if (category != null) {
@@ -114,7 +122,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long lastId, Category category, int pageSize, Long userId) {
+	public List<GroupInfo> findAllByCursorAndCreatedUserId(Long lastId, Category category, int pageSize, Long userId, String groupName) {
 
 		return queryFactory
 			.select(Projections.constructor(
@@ -134,7 +142,8 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 				groupMember.userId.eq(userId),
 				groupMember.role.role.eq(GroupMemberRole.OWNER),
 				lastId != null ? group.id.lt(lastId) : null,
-				category != null ? group.category.eq(category) : null
+				category != null ? group.category.eq(category) : null,
+				groupName != null && !groupName.isBlank() ? group.name.contains(groupName) : null
 			)
 			.orderBy(group.id.desc())
 			.limit(pageSize + 1)
