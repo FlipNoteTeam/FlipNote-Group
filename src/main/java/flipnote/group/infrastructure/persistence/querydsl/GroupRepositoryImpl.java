@@ -6,13 +6,16 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import flipnote.group.adapter.out.entity.QGroupEntity;
 import flipnote.group.adapter.out.entity.QGroupMemberEntity;
 import flipnote.group.domain.model.group.Category;
 import flipnote.group.domain.model.group.GroupInfo;
+import flipnote.group.domain.model.group.Visibility;
 import flipnote.group.domain.model.member.GroupMemberRole;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +36,7 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize, String groupName) {
+	public List<GroupInfo> findAllByCursor(Long lastId, Category category, int pageSize, String groupName, Long userId) {
 		//삭제되지 않은
 		BooleanBuilder where = new BooleanBuilder()
 			.and(group.deletedAt.isNull());
@@ -51,6 +54,18 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom {
 		if (category != null) {
 			where.and(group.category.eq(category));
 		}
+
+		BooleanExpression isPublic = group.visibility.eq(Visibility.PUBLIC);
+
+		BooleanExpression isMember = JPAExpressions.selectOne()
+			.from(groupMember)
+			.where(
+				groupMember.groupId.eq(group.id),
+				groupMember.userId.eq(userId)
+			)
+			.exists();
+
+		where.and(isPublic.or(isMember));
 
 		return queryFactory.select(Projections.constructor(
 				GroupInfo.class,
