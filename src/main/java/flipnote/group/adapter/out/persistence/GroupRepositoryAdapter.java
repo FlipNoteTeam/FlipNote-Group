@@ -72,4 +72,9 @@ public class GroupRepositoryAdapter implements GroupRepositoryPort {
 
 		return maxMember > count;
 	}
+
+	@Override
+	public List<GroupEntity> findAllById(List<Long> groupIds) {
+		return groupRepository.findAllById(groupIds);
+	}
 }

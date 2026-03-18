@@ -8,10 +8,7 @@ import flipnote.group.domain.model.join.JoinMyInfo;
 public record FindMyJoinListResult(
 	List<JoinMyInfo> joinList
 ) {
-	public static FindMyJoinListResult of(List<JoinEntity> joinList) {
-		List<JoinMyInfo> joinInfoList = joinList.stream()
-			.map(JoinMyInfo::of)
-			.toList();
-		return new FindMyJoinListResult(joinInfoList);
+	public static FindMyJoinListResult of(List<JoinMyInfo> joinList) {
+		return new FindMyJoinListResult(joinList);
 	}
 }
