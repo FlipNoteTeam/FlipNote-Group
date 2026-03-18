@@ -14,7 +14,7 @@ public interface GroupRepositoryPort {
 
     void delete(Long id);
 
-	List<GroupInfo> findAllByCursor(Long cursorId, Category category, int size, String groupName);
+	List<GroupInfo> findAllByCursor(Long cursorId, Category category, int size, String groupName, Long userId);
 
 	List<GroupInfo> findAllByCursorAndUserId(Long cursorId, Category category, int size, Long userId, String groupName);
 

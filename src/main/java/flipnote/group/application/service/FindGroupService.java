@@ -98,7 +98,8 @@ public class FindGroupService implements FindGroupUseCase {
 			req.getCursorId(),
 			req.getCategory(),
 			req.getSize(),
-			req.getGroupName());
+			req.getGroupName(),
+			userId);
 
 		enrichGroupsWithImageUrl(groups);
 
