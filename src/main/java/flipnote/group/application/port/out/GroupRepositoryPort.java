@@ -14,11 +14,11 @@ public interface GroupRepositoryPort {
 
     void delete(Long id);
 
-	List<GroupInfo> findAllByCursor(Long cursorId, Category category, int size);
+	List<GroupInfo> findAllByCursor(Long cursorId, Category category, int size, String groupName);
 
-	List<GroupInfo> findAllByCursorAndUserId(Long cursorId, Category category, int size, Long userId);
+	List<GroupInfo> findAllByCursorAndUserId(Long cursorId, Category category, int size, Long userId, String groupName);
 
-	List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId);
+	List<GroupInfo> findAllByCursorAndCreatedUserId(Long cursorId, Category category, int size, Long userId, String groupName);
 
 	boolean checkJoinable(Long groupId);
 

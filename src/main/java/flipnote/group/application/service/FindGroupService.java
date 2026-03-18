@@ -97,7 +97,8 @@ public class FindGroupService implements FindGroupUseCase {
 		List<GroupInfo> groups = groupRepository.findAllByCursor(
 			req.getCursorId(),
 			req.getCategory(),
-			req.getSize());
+			req.getSize(),
+			req.getGroupName());
 
 		enrichGroupsWithImageUrl(groups);
 
@@ -116,7 +117,8 @@ public class FindGroupService implements FindGroupUseCase {
 			req.getCursorId(),
 			req.getCategory(),
 			req.getSize(),
-			userId);
+			userId,
+			req.getGroupName());
 
 		enrichGroupsWithImageUrl(groups);
 
@@ -135,7 +137,8 @@ public class FindGroupService implements FindGroupUseCase {
 			req.getCursorId(),
 			req.getCategory(),
 			req.getSize(),
-			userId);
+			userId,
+			req.getGroupName());
 
 		enrichGroupsWithImageUrl(groups);
 

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class GroupListRequestDto extends CursorPagingRequest {
 
 	private Category category;
+	private String groupName;
 
 	@Override
 	public PageRequest getPageRequest() {
