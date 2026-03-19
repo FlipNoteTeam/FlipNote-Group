@@ -16,4 +16,6 @@ public interface JoinRepositoryPort {
 	JoinEntity updateJoin(JoinEntity join);
 
 	List<JoinEntity> findMyJoinList(Long userId);
+
+	void delete(JoinEntity join);
 }

@@ -2,6 +2,7 @@ package flipnote.group.adapter.in.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,11 @@ import flipnote.group.api.dto.request.JoinRespondRequestDto;
 import flipnote.group.api.dto.response.ApplicationFormResponseDto;
 import flipnote.group.api.dto.response.FindJoinFormListResponseDto;
 import flipnote.group.api.dto.response.JoinRespondResponseDto;
+import flipnote.group.application.port.in.DeleteJoinUseCase;
 import flipnote.group.application.port.in.JoinRespondUseCase;
 import flipnote.group.application.port.in.JoinUseCase;
 import flipnote.group.application.port.in.command.ApplicationFormCommand;
+import flipnote.group.application.port.in.command.DeleteJoinCommand;
 import flipnote.group.application.port.in.command.FindJoinFormCommand;
 import flipnote.group.application.port.in.command.JoinRespondCommand;
 import flipnote.group.application.port.in.result.ApplicationFormResult;
@@ -34,6 +37,7 @@ public class JoinController {
 
 	private final JoinUseCase joinUseCase;
 	private final JoinRespondUseCase joinRespondUseCase;
+	private final DeleteJoinUseCase deleteJoinUseCase;
 
 	/**
 	 * 가입 신청 요청
@@ -99,6 +103,25 @@ public class JoinController {
 		JoinRespondResponseDto res = JoinRespondResponseDto.of(result);
 
 		return ResponseEntity.ok(res);
+	}
+
+	/**
+	 * 가입 신청 취소
+	 * @param userId
+	 * @param groupId
+	 * @param joinId
+	 * @return
+	 */
+	@DeleteMapping("/{joinId}")
+	public ResponseEntity<Void> deleteJoin(
+		@RequestHeader("X-USER-ID") Long userId,
+		@PathVariable("groupId") Long groupId,
+		@PathVariable("joinId") Long joinId
+	) {
+		DeleteJoinCommand cmd = new DeleteJoinCommand(userId, joinId);
+		deleteJoinUseCase.deleteJoin(cmd);
+
+		return ResponseEntity.ok().build();
 	}
 
 }

@@ -55,4 +55,9 @@ public class JoinRepositoryAdapter implements JoinRepositoryPort {
 
 		return joinList;
 	}
+
+	@Override
+	public void delete(JoinEntity join) {
+		joinRepository.delete(join);
+	}
 }
