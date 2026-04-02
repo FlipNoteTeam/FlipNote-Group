@@ -1,5 +1,7 @@
 package flipnote.group.application.port.in;
 
+import java.util.List;
+
 import flipnote.group.api.dto.request.GroupListRequestDto;
 import flipnote.group.api.dto.response.CursorPagingResponseDto;
 import flipnote.group.application.port.in.command.FindGroupCommand;
@@ -15,4 +17,5 @@ public interface FindGroupUseCase {
 
 	CursorPagingResponseDto<GroupInfo> findCreatedGroup(Long userId, GroupListRequestDto req);
 
+	List<Long> findMyGroup(Long userId);
 }

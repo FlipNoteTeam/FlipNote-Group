@@ -24,4 +24,6 @@ public interface GroupMemberRepositoryPort {
     GroupMemberEntity findById(Long memberId);
 
     List<Long> findUserIdsByPermission(Long groupId, GroupPermission permission);
+
+    List<Long> findGroupIdsByUserId(Long userId);
 }
