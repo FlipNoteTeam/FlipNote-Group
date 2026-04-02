@@ -1,7 +1,6 @@
 package flipnote.group.adapter.out.persistence;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -122,5 +121,10 @@ public class GroupMemberRepositoryAdapter implements GroupMemberRepositoryPort {
 	@Override
 	public List<Long> findUserIdsByPermission(Long groupId, GroupPermission permission) {
 		return groupMemberRepository.findUserIdsByGroupIdAndPermission(groupId, permission);
+	}
+
+	@Override
+	public List<Long> findGroupIdsByUserId(Long userId) {
+		return groupMemberRepository.findGroupIdsByUserId(userId);
 	}
 }
